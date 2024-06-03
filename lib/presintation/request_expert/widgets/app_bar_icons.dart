@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:shawir/resources/colors/app_colors.dart';
 
 class AppBarIcons extends StatelessWidget {
-  const AppBarIcons({super.key, required this.icon, this.onPressed});
+  const AppBarIcons({
+    super.key,
+    required this.icon,
+    this.onPressed,
+    this.height,
+    this.width,
+  });
   final Widget icon;
+  final double? height;
+  final double? width;
   final void Function()? onPressed;
   @override
   Widget build(BuildContext context) {
@@ -11,10 +19,12 @@ class AppBarIcons extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(10),
+        // padding: const EdgeInsets.all(10),
+        height: height,
+        width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(7),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               blurRadius: 6,
               offset: Offset(0, 0),

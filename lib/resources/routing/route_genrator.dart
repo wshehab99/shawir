@@ -9,7 +9,7 @@ abstract class RouteGenrator {
       case Routes.splash:
         return MaterialPageRoute(builder: (_) => const SplashView());
       case Routes.requestExpert:
-        return MaterialPageRoute(builder: (_) => const RequestExpertView());
+        return MaterialPageRoute(builder: (_) =>  RequestExpertView());
       default:
         return MaterialPageRoute(builder: (_) => const Scaffold());
     }

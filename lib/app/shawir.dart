@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shawir/resources/routing/route_genrator.dart';
 import 'package:shawir/resources/routing/routes.dart';
 
@@ -9,7 +10,7 @@ class Shawir extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       onGenerateRoute: RouteGenrator.onGenerateRoute,
       initialRoute: Routes.splash,
       theme: ThemeManager.theme,
