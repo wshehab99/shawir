@@ -365,16 +365,11 @@ class CustomStepper extends StatefulWidget {
 
 class _CustomStepperState extends State<CustomStepper>
     with TickerProviderStateMixin {
-  late List<GlobalKey> _keys;
   final Map<int, CustomStepState> _oldStates = <int, CustomStepState>{};
 
   @override
   void initState() {
     super.initState();
-    _keys = List<GlobalKey>.generate(
-      widget.steps.length,
-      (int i) => GlobalKey(),
-    );
 
     for (int i = 0; i < widget.steps.length; i += 1) {
       _oldStates[i] = widget.steps[i].state;
@@ -397,10 +392,6 @@ class _CustomStepperState extends State<CustomStepper>
 
   double? get _stepIconWidth => widget.stepIconWidth;
 
-  double get _heightFactor {
-    return (_isLabel() && _stepIconHeight != null) ? 2.5 : 2.0;
-  }
-
   bool _isFirst(int index) {
     return index == 0;
   }
@@ -417,23 +408,14 @@ class _CustomStepperState extends State<CustomStepper>
     return Theme.of(context).brightness == Brightness.dark;
   }
 
-  bool _isLabel() {
-    for (final CustomStep step in widget.steps) {
-      if (step.label != null) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   CustomStepStyle? _stepStyle(int index) {
     return widget.steps[index].stepStyle;
   }
 
   Color _connectorColor(bool isActive) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final Set<MaterialState> states = <MaterialState>{
-      if (isActive) MaterialState.selected else MaterialState.disabled,
+    final Set<WidgetState> states = <WidgetState>{
+      if (isActive) WidgetState.selected else WidgetState.disabled,
     };
     final Color? resolvedConnectorColor =
         widget.connectorColor?.resolve(states);
@@ -625,24 +607,24 @@ class _CustomStepperState extends State<CustomStepper>
             TextButton(
               onPressed: widget.onStepContinue,
               style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
-                  return states.contains(MaterialState.disabled)
+                foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+                    (Set<WidgetState> states) {
+                  return states.contains(WidgetState.disabled)
                       ? null
                       : (_isDark()
                           ? colorScheme.onSurface
                           : colorScheme.onPrimary);
                 }),
-                backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
-                  return _isDark() || states.contains(MaterialState.disabled)
+                backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                    (Set<WidgetState> states) {
+                  return _isDark() || states.contains(WidgetState.disabled)
                       ? null
                       : colorScheme.primary;
                 }),
-                padding: const MaterialStatePropertyAll<EdgeInsetsGeometry>(
+                padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
                     buttonPadding),
                 shape:
-                    const MaterialStatePropertyAll<OutlinedBorder>(buttonShape),
+                    const WidgetStatePropertyAll<OutlinedBorder>(buttonShape),
               ),
               child: Text(themeData.useMaterial3
                   ? localizations.continueButtonLabel
@@ -666,26 +648,6 @@ class _CustomStepperState extends State<CustomStepper>
         ),
       ),
     );
-  }
-
-  TextStyle _titleStyle(int index) {
-    final ThemeData themeData = Theme.of(context);
-    final TextTheme textTheme = themeData.textTheme;
-
-    switch (widget.steps[index].state) {
-      case CustomStepState.indexed:
-      case CustomStepState.editing:
-      case CustomStepState.complete:
-        return textTheme.bodyLarge!;
-      case CustomStepState.disabled:
-        return textTheme.bodyLarge!.copyWith(
-          color: _isDark() ? _kDisabledDark : _kDisabledLight,
-        );
-      case CustomStepState.error:
-        return textTheme.bodyLarge!.copyWith(
-          color: _isDark() ? _kErrorDark : _kErrorLight,
-        );
-    }
   }
 
   TextStyle _subtitleStyle(int index) {
@@ -743,108 +705,6 @@ class _CustomStepperState extends State<CustomStepper>
               child: widget.steps[index].subtitle!,
             ),
           ),
-      ],
-    );
-  }
-
-  Widget _buildLabelText(int index) {
-    if (widget.steps[index].label != null) {
-      return AnimatedDefaultTextStyle(
-        style: _labelStyle(index),
-        duration: kThemeAnimationDuration,
-        child: widget.steps[index].label!,
-      );
-    }
-    return const SizedBox.shrink();
-  }
-
-  Widget _buildVerticalHeader(int index) {
-    final bool isActive = widget.steps[index].isActive;
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: Row(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              // Line parts are always added in order for the ink splash to
-              // flood the tips of the connector lines.
-              _buildLine(!_isFirst(index), isActive),
-              _buildIcon(index),
-              _buildLine(!_isLast(index), isActive),
-            ],
-          ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsetsDirectional.only(start: 12.0),
-              child: _buildHeaderText(index),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildVerticalBody(int index) {
-    final double? marginLeft = _stepIconMargin?.resolve(TextDirection.ltr).left;
-    final double? marginRight =
-        _stepIconMargin?.resolve(TextDirection.ltr).right;
-    final double? additionalMarginLeft =
-        marginLeft != null ? marginLeft / 2.0 : null;
-    final double? additionalMarginRight =
-        marginRight != null ? marginRight / 2.0 : null;
-
-    return Stack(
-      children: <Widget>[
-        PositionedDirectional(
-          // When use margin affects the left or right side of the child, we
-          // need to add half of the margin to the start or end of the child
-          // respectively to get the correct positioning.
-          start: 24.0 +
-              (additionalMarginLeft ?? 0.0) +
-              (additionalMarginRight ?? 0.0),
-          top: 0.0,
-          bottom: 0.0,
-          child: SizedBox(
-            // The line is drawn from the center of the circle vertically until
-            // it reaches the bottom and then horizontally to the edge of the
-            // stepper.
-            width: _stepIconWidth ?? _kStepSize,
-            child: Center(
-              child: SizedBox(
-                width:
-                    !_isLast(index) ? (widget.connectorThickness ?? 1.0) : 0.0,
-                child: Container(
-                  color: _connectorColor(widget.steps[index].isActive),
-                ),
-              ),
-            ),
-          ),
-        ),
-        AnimatedCrossFade(
-          firstChild: Container(height: 0.0),
-          secondChild: Container(
-            margin: EdgeInsetsDirectional.only(
-              // Adjust [controlsBuilder] padding so that the content is
-              // centered vertically.
-              start: 60.0 + (marginLeft ?? 0.0),
-              end: 24.0,
-              bottom: 24.0,
-            ),
-            child: Column(
-              children: <Widget>[
-                widget.steps[index].content,
-                _buildVerticalControls(index),
-              ],
-            ),
-          ),
-          firstCurve: const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
-          secondCurve: const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
-          sizeCurve: Curves.fastOutSlowIn,
-          crossFadeState: _isCurrent(index)
-              ? CrossFadeState.showSecond
-              : CrossFadeState.showFirst,
-          duration: kThemeAnimationDuration,
-        ),
       ],
     );
   }

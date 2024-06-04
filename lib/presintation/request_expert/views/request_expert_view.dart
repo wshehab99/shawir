@@ -1,11 +1,14 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shawir/resources/assets/assets_manager.dart';
+import 'package:shawir/resources/assets/svg_manager.dart';
 import 'package:shawir/resources/colors/app_colors.dart';
 
 import '../controllers/request_expert_controller.dart';
 import '../widgets/app_bar_icons.dart';
+import '../widgets/attatchment_widget.dart';
 import '../widgets/custom_steper.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/step_controller_button.dart';
@@ -29,7 +32,7 @@ class RequestExpertView extends StatelessWidget {
           controlsBuilder: (context, details) => Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (controller.currentPage > 0)
+              if (controller.currentPage > 0 && controller.currentPage < 4)
                 StepControllerButton(
                   onPressed: () => controller.currentPage > 0
                       ? controller.decrementPage()
@@ -42,6 +45,13 @@ class RequestExpertView extends StatelessWidget {
                       ? controller.incrementPage()
                       : null,
                   text: "Next",
+                ),
+              if (controller.currentPage > 0 && controller.currentPage <= 4)
+                StepControllerButton(
+                  onPressed: () => controller.currentPage < 4
+                      ? controller.incrementPage()
+                      : null,
+                  text: "Send",
                 ),
             ],
           ),
@@ -160,6 +170,75 @@ class RequestExpertView extends StatelessWidget {
               state: controller.currentPage.value > 1
                   ? CustomStepState.complete
                   : CustomStepState.indexed,
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                          onPressed: () => controller.showTiktok(),
+                          icon: const Icon(Icons.tiktok)),
+                      IconButton(
+                          onPressed: () => controller.showFacebook(),
+                          icon: const Icon(Icons.facebook)),
+                      IconButton(
+                        onPressed: () => controller.showIn(),
+                        icon: const SizedSvg(SvgsManager.linkedin),
+                      ),
+                      IconButton(
+                        onPressed: () => controller.showSnapchat(),
+                        icon: const Icon(Icons.snapchat),
+                      ),
+                      IconButton(
+                        onPressed: () => controller.showTwitter(),
+                        icon: const SizedSvg(SvgsManager.twitter),
+                      ),
+                      IconButton(
+                        onPressed: () => controller.showInsta(),
+                        icon: const SizedSvg(SvgsManager.instagram),
+                      ),
+                    ],
+                  ),
+                  if (controller.tiktokShown.value)
+                    SocialMediaWidget(
+                      label: "Linke tiktok",
+                      delete: () => controller.unshowTiktok(),
+                    ),
+                  if (controller.facebbokShown.value)
+                    SocialMediaWidget(
+                      label: "Linke facebook",
+                      delete: () => controller.unshowFacebook(),
+                    ),
+                  if (controller.snapShown.value)
+                    SocialMediaWidget(
+                      label: "Linke snapchat",
+                      delete: () => controller.unshowSnapchat(),
+                    ),
+                  if (controller.inShown.value)
+                    SocialMediaWidget(
+                      label: "Linke linkedin",
+                      delete: () => controller.unshowIn(),
+                    ),
+                  if (controller.twitterShown.value)
+                    SocialMediaWidget(
+                      label: "Linke twitter",
+                      delete: () => controller.unshowTwitter(),
+                    ),
+                  if (controller.instaShown.value)
+                    SocialMediaWidget(
+                      label: "Linke instagram",
+                      delete: () => controller.unshowInsta(),
+                    ),
+                ],
+              ),
+            ),
+            CustomStep(
+              isActive: controller.currentPage.value == 2,
+              state: controller.currentPage.value > 2
+                  ? CustomStepState.complete
+                  : CustomStepState.indexed,
               content: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -182,8 +261,8 @@ class RequestExpertView extends StatelessWidget {
               ),
             ),
             CustomStep(
-              isActive: controller.currentPage.value == 2,
-              state: controller.currentPage.value > 2
+              isActive: controller.currentPage.value == 3,
+              state: controller.currentPage.value > 3
                   ? CustomStepState.complete
                   : CustomStepState.indexed,
               content: const Column(
@@ -207,16 +286,8 @@ class RequestExpertView extends StatelessWidget {
               ),
             ),
             CustomStep(
-              isActive: controller.currentPage.value == 2,
-              state: controller.currentPage.value > 2
-                  ? CustomStepState.complete
-                  : CustomStepState.indexed,
-              content: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, children: []),
-            ),
-            CustomStep(
-              isActive: controller.currentPage.value == 2,
-              state: controller.currentPage.value > 2
+              isActive: controller.currentPage.value == 4,
+              state: controller.currentPage.value > 4
                   ? CustomStepState.complete
                   : CustomStepState.indexed,
               content: Column(
@@ -344,102 +415,53 @@ class CategoryRowWidget extends StatelessWidget {
   }
 }
 
-class AttatchmentWidget extends StatelessWidget {
-  const AttatchmentWidget({
+class SocialMediaWidget extends StatelessWidget {
+  const SocialMediaWidget({
     super.key,
     required this.label,
-    required this.imagePath,
+    required this.delete,
   });
   final String label;
-  final String imagePath;
+  final void Function()? delete;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
-        const SizedBox(height: 10),
-        Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-              width: 2.5,
-              color: AppColors.appBarTitle,
-            ),
-            image: DecorationImage(
-              image: AssetImage(imagePath),
-              fit: BoxFit.cover,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 7),
+          CustomTextField(
+            prefixIcon: const Icon(Icons.alternate_email),
+            suffixIcon: IconButton(
+              onPressed: delete,
+              icon: const Icon(Icons.delete),
             ),
           ),
-          child: Column(
-            children: [
-              const SizedBox(height: 50),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(
-                      Icons.arrow_circle_left_outlined,
-                      size: 25,
-                      color: AppColors.border,
-                    ),
-                    Icon(
-                      Icons.arrow_circle_right_outlined,
-                      size: 25,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  StepControllerButton(
-                    onPressed: () {},
-                    text: "Add Profe",
-                    height: 40,
-                  ),
-                  StepControllerButton(
-                    onPressed: () {},
-                    text: "Edit Profe",
-                    height: 40,
-                    color: AppColors.border,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
 
-class AttatchmentButton extends StatelessWidget {
-  const AttatchmentButton({
-    super.key,
-    required this.onPressed,
-    required this.text,
-  });
-  final void Function()? onPressed;
-  final String text;
+class SizedSvg extends StatelessWidget {
+  const SizedSvg(this.path, {super.key, this.color, this.dimension});
+  final String path;
+  final double? dimension;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ElevatedButton(
-        onPressed: onPressed,
-        child: SizedBox(
-          height: 45,
-          child: Center(
-            child: Text(
-              text,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ),
+    return SizedBox.square(
+      dimension: dimension ?? 25,
+      child: SvgPicture.asset(
+        path,
+        colorFilter: ColorFilter.mode(
+          color ?? Theme.of(context).primaryColor,
+          BlendMode.srcIn,
         ),
       ),
     );
