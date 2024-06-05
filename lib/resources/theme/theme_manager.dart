@@ -26,9 +26,13 @@ abstract class ThemeManager {
         fontSize: 24,
         color: AppColors.white,
       ),
-           titleSmall: StyleManager.semiBold(
+      titleSmall: StyleManager.semiBold(
         fontSize: 18,
         color: AppColors.appBarTitle,
+      ),
+      bodyMedium: StyleManager.regular(
+        fontSize: 18,
+        color: AppColors.border,
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(

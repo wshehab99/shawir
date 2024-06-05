@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
     this.suffixIcon,
     this.initialValue,
     this.enabled,
+    this.prefixIcon,
     this.onTap,
   });
   final String? hintText;
@@ -22,6 +23,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final bool? enabled;
   final void Function()? onTap;
+  final Widget? prefixIcon;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -35,6 +37,7 @@ class CustomTextField extends StatelessWidget {
       style: Theme.of(context).inputDecorationTheme.counterStyle,
       decoration: InputDecoration(
         suffixIcon: suffixIcon,
+        prefixIcon: prefixIcon,
         hintText: hintText,
       ),
     );
