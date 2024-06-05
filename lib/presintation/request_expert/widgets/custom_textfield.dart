@@ -13,6 +13,7 @@ class CustomTextField extends StatelessWidget {
     this.enabled,
     this.prefixIcon,
     this.onTap,
+    this.validator,
   });
   final String? hintText;
   final String? initialValue;
@@ -24,6 +25,7 @@ class CustomTextField extends StatelessWidget {
   final bool? enabled;
   final void Function()? onTap;
   final Widget? prefixIcon;
+  final String? Function(String?)? validator;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -34,6 +36,7 @@ class CustomTextField extends StatelessWidget {
       initialValue: initialValue,
       enabled: enabled,
       onTap: onTap,
+      validator: validator,
       style: Theme.of(context).inputDecorationTheme.counterStyle,
       decoration: InputDecoration(
         suffixIcon: suffixIcon,
