@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/support/helpers.dart';
 import '../../../resources/colors/app_colors.dart';
 import 'step_controller_button.dart';
 
@@ -8,9 +9,17 @@ class AttatchmentWidget extends StatelessWidget {
     super.key,
     required this.label,
     required this.imagePath,
+    required this.route,
+    required this.pickFile,
+    required this.pickImage,
+    required this.takeImage,
   });
   final String label;
   final String imagePath;
+  final String route;
+  final void Function() pickImage;
+  final void Function() takeImage;
+  final void Function() pickFile;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,8 +46,8 @@ class AttatchmentWidget extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 50),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -58,12 +67,26 @@ class AttatchmentWidget extends StatelessWidget {
               Row(
                 children: [
                   StepControllerButton(
-                    onPressed: () {},
+                    onPressed: () => showPickFileBottomSheet(
+                      context,
+                      pickFile: () async {
+                        pickFile();
+                        // Navigator.pushNamed(context, route);
+                      },
+                      pickImage: () async {
+                        pickImage();
+                        // Navigator.pushNamed(context, route);
+                      },
+                      takeImage: () async {
+                        takeImage();
+                        // Navigator.pushNamed(context, route);
+                      },
+                    ),
                     text: "Add Profe",
                     height: 40,
                   ),
                   StepControllerButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.pushNamed(context, route),
                     text: "Edit Profe",
                     height: 40,
                     color: AppColors.border,
@@ -73,6 +96,42 @@ class AttatchmentWidget extends StatelessWidget {
             ],
           ),
         ),
+      ],
+    );
+  }
+}
+
+class AttatchmenIconWidgettWidget extends StatelessWidget {
+  const AttatchmenIconWidgettWidget({
+    super.key,
+    this.color = Colors.purple,
+    required this.icon,
+    this.onTap,
+    required this.txt,
+  });
+  final Color color;
+  final IconData icon;
+  final void Function()? onTap;
+  final String txt;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color,
+          ),
+          child: InkWell(
+            onTap: onTap,
+            child: Icon(
+              icon,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        Text(txt),
       ],
     );
   }
