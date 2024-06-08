@@ -5,13 +5,15 @@ import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../app/compressor/compressor.dart';
 import '../../../domain/models/category.dart';
 import '../../../domain/models/sub_category.dart';
 import '../../../domain/repo/category/category_repo.dart';
 
 class RequestExpertController extends GetxController {
   final CategoryRepo _repo;
-  RequestExpertController(this._repo);
+  final Compressor _compressor;
+  RequestExpertController(this._repo, this._compressor);
   final currentPage = 0.obs;
   final facebbokShown = false.obs;
   final tiktokShown = false.obs;
@@ -60,6 +62,16 @@ class RequestExpertController extends GetxController {
         Get.snackbar(
           "fields required",
           "please select Educational profs, Expieracne certificate and personal photo",
+        );
+      } else {
+        currentPage.value++;
+        update();
+      }
+    } else if (currentPage.value == 4) {
+      if (pickedVideo.value == null) {
+        Get.snackbar(
+          "fields required",
+          "please select introduction video",
         );
       } else {
         currentPage.value++;
@@ -217,8 +229,29 @@ class RequestExpertController extends GetxController {
     super.onInit();
   }
 
-  Future<XFile?> pickImage({ImageSource source = ImageSource.gallery}) =>
-      ImagePicker().pickImage(source: source);
+  Future<XFile?> pickImage({ImageSource source = ImageSource.gallery}) async {
+    final value = await ImagePicker().pickImage(source: source);
+    if (value != null) {
+      return _compressor.compressImage(value);
+    }
+    return null;
+  }
+
+  Future<List<XFile>> pickMultiImage() async {
+    List<XFile> compressed = [];
+
+    List<XFile> result = await ImagePicker().pickMultiImage();
+    if (result.isNotEmpty) {
+      for (var image in result) {
+        var com = await _compressor.compressImage(image);
+        if (com != null) {
+          compressed.add(com);
+        }
+      }
+    }
+    return compressed;
+  }
+
   Future<FilePickerResult?> pickFile() => FilePicker.platform.pickFiles();
   Rx<List<File>> ids = Rx([]);
   Future<void> pickFileId() async {
@@ -337,7 +370,7 @@ class RequestExpertController extends GetxController {
     update();
   }
 
-  Rx<XFile?> pickedVideo = Rx(null);
+  Rx<File?> pickedVideo = Rx(null);
   void pickVideo() {
     ImagePicker()
         .pickVideo(
@@ -346,12 +379,46 @@ class RequestExpertController extends GetxController {
         .then((value) {
       if (value != null) {
         if (GetUtils.isVideo(value.path)) {
-          pickedVideo.value = value;
+          categoryLoad.value = true;
           update();
+          _compressor.compressVideo(value.path).then((comprssedValue) {
+            pickedVideo.value = comprssedValue?.file;
+            categoryLoad.value = false;
+
+            update();
+          });
         }
       }
     });
   }
+
+  void deleteVideo() {
+    pickedVideo.value = null;
+    update();
+  }
+
+  void sendRequest() {
+    if (terms.value) {
+    } else {
+      Get.snackbar(
+        " terms and conditions",
+        "You must accept terms and conditions",
+      );
+    }
+  }
+
+  final terms = true.obs;
+  void changeTerms(bool? value) {
+    if (value != null) {
+      terms.value = value;
+    }
+    update();
+  }
+
+  //todo::
+  void uploadVideo() {}
+  void uploadProfileImage() {}
+  void uploadDocument() {}
 
   bool validateFile(String path) =>
       GetUtils.isImage(path) || GetUtils.isPDF(path);
