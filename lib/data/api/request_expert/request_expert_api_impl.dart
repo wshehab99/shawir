@@ -1,11 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:shawir/data/dio/methods.dart';
+import 'package:shawir/data/response/languages_response.dart';
+import 'package:shawir/data/response/professions_response.dart';
 import 'package:shawir/data/response/upload_documents_response.dart';
 import 'package:shawir/domain/models/avatar.dart';
 import 'package:shawir/domain/models/category.dart';
 import 'package:shawir/domain/models/sub_category.dart';
 import 'package:shawir/domain/requests/update_avatar.dart';
 import 'package:shawir/domain/requests/upload_document_request.dart';
+import 'package:shawir/domain/requests/upload_video_request.dart';
 
 import '../../../config/api.dart';
 import '../../../config/app.dart';
@@ -52,5 +55,34 @@ class CategoryApiImpl implements CategoryApi {
       headers: {AppConfig.auth: ApiConfig.authToken},
     );
     return ExpertAvatar.fromJson(result.data!);
+  }
+
+  @override
+  Future<UploadDocumentsResponse> uploadVideo(
+      UploadVideoRequest request) async {
+    Response result = await _dio.post<UploadDocumentsResponse>(
+      path: ApiConfig.uploadVideo,
+      data: await request.json,
+      headers: {AppConfig.auth: ApiConfig.authToken},
+    );
+    return UploadDocumentsResponse.fromJson(result.data!);
+  }
+
+  @override
+  Future<LanguagesResponse> getLanguges() async {
+    Response result = await _dio.get<LanguagesResponse>(
+      path: ApiConfig.languages,
+      headers: {AppConfig.auth: ApiConfig.authToken},
+    );
+    return LanguagesResponse.fromJson(result.data!);
+  }
+
+  @override
+  Future<ProfessionsResponse> getProffisions() async {
+    Response result = await _dio.get<ProfessionsResponse>(
+      path: ApiConfig.professions,
+      headers: {AppConfig.auth: ApiConfig.authToken},
+    );
+    return ProfessionsResponse.fromJson(result.data!);
   }
 }

@@ -1,12 +1,17 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:shawir/app/exceptions/failure.dart';
+import 'package:shawir/data/response/languages_response.dart';
+import 'package:shawir/data/response/professions_response.dart';
 import 'package:shawir/data/response/upload_documents_response.dart';
+import 'package:shawir/domain/models/avatar.dart';
 
 import 'package:shawir/domain/models/category.dart';
 
 import 'package:shawir/domain/models/sub_category.dart';
+import 'package:shawir/domain/requests/update_avatar.dart';
 import 'package:shawir/domain/requests/upload_document_request.dart';
+import 'package:shawir/domain/requests/upload_video_request.dart';
 
 import '../../../app/exceptions/handler.dart';
 import '../../../config/error_data_source.dart';
@@ -59,6 +64,72 @@ class CategoryRepoImpl implements CategoryRepo {
     if (await _info.check) {
       try {
         var response = await _api.uploadDocument(request);
+        return Right(response);
+      } catch (error) {
+        return Left(Handler.handle(error).failure);
+      }
+    } else {
+      //return if there is no internet connection
+      return Left(ErrorDataSourceConfig.noInternetConnection.getFailure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, ExpertAvatar>> changeAvatar(
+      UpdateAvatarRequest request) async {
+    //check if there is internet connection
+    if (await _info.check) {
+      try {
+        var response = await _api.changeAvatar(request);
+        return Right(response);
+      } catch (error) {
+        return Left(Handler.handle(error).failure);
+      }
+    } else {
+      //return if there is no internet connection
+      return Left(ErrorDataSourceConfig.noInternetConnection.getFailure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, UploadDocumentsResponse>> uploadVideo(
+      UploadVideoRequest request) async {
+    //check if there is internet connection
+    if (await _info.check) {
+      try {
+        var response = await _api.uploadVideo(request);
+        return Right(response);
+      } catch (error) {
+        return Left(Handler.handle(error).failure);
+      }
+    } else {
+      //return if there is no internet connection
+      return Left(ErrorDataSourceConfig.noInternetConnection.getFailure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, LanguagesResponse>> languges() async {
+    //check if there is internet connection
+    if (await _info.check) {
+      try {
+        var response = await _api.getLanguges();
+        return Right(response);
+      } catch (error) {
+        return Left(Handler.handle(error).failure);
+      }
+    } else {
+      //return if there is no internet connection
+      return Left(ErrorDataSourceConfig.noInternetConnection.getFailure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProfessionsResponse>> proffisions() async {
+    //check if there is internet connection
+    if (await _info.check) {
+      try {
+        var response = await _api.getProffisions();
         return Right(response);
       } catch (error) {
         return Left(Handler.handle(error).failure);

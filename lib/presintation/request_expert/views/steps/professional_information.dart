@@ -32,7 +32,7 @@ class ProfessionalInformation extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: SelectImageWidget(
-                  image: controller.profileImage.value?.path,
+                  image: controller.avatar.value?.uriFormatted,
                   pick: controller.pickProfileImage,
                 ),
               ),
@@ -76,6 +76,7 @@ class ProfessionalInformation extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     flex: 1,
@@ -83,9 +84,8 @@ class ProfessionalInformation extends StatelessWidget {
                       hintText: "choose your country",
                       // enabled: false,
                       controller: TextEditingController(
-                        text: controller
-                                .slectedCountry.value.phoneCode.isNotEmpty
-                            ? "+${controller.slectedCountry.value.phoneCode}"
+                        text: controller.slectedCountry.value != null
+                            ? "+${controller.slectedCountry.value!.phoneCode}"
                             : "",
                       ),
                       validator: (value) => Validator.countryValidator(value),

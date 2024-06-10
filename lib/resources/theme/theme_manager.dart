@@ -34,6 +34,10 @@ abstract class ThemeManager {
         fontSize: 18,
         color: AppColors.border,
       ),
+      bodySmall: StyleManager.regular(
+        fontSize: 13,
+        color: AppColors.white,
+      ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       isDense: true,

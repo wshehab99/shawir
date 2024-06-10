@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shawir/domain/models/document.dart';
 
 class SelectedFileWidget extends StatelessWidget {
   const SelectedFileWidget(this.file, {super.key, this.remove});
-  final File file;
+  final Document file;
   final void Function()? remove;
   @override
   Widget build(BuildContext context) {
@@ -16,9 +15,9 @@ class SelectedFileWidget extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          GetUtils.isImage(file.path)
-              ? Image.file(
-                  file,
+          GetUtils.isImage(file.documentUri)
+              ? Image.network(
+                  file.uriFormatted,
                   height: 100,
                   width: 100,
                   fit: BoxFit.cover,

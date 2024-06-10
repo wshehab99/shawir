@@ -6,5 +6,5 @@ class UpdateAvatarRequest {
   final File file;
   UpdateAvatarRequest(this.file);
   Future<FormData> get json async =>
-      FormData.fromMap({'document': await MultipartFile.fromFile(file.path)});
+      FormData.fromMap({'avatar': await MultipartFile.fromFile(file.path)});
 }

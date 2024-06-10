@@ -1,45 +1,63 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:video_compress/video_compress.dart';
+import 'package:video_player/video_player.dart';
+
+import '../../../domain/models/document.dart';
 
 class PickedVideoWidget extends StatefulWidget {
   const PickedVideoWidget(this.file, {super.key, this.delete});
-  final File file;
+  final Document file;
   final void Function()? delete;
   @override
   State<PickedVideoWidget> createState() => _PickedVideoWidgetState();
 }
 
 class _PickedVideoWidgetState extends State<PickedVideoWidget> {
-  dynamic thumb;
-  void gitThumbnail() async {
-    thumb = await VideoCompress.getByteThumbnail(widget.file.path);
-    setState(() {});
+  late VideoPlayerController _controller;
+
+  void initVideo() async {
+    _controller =
+        VideoPlayerController.networkUrl(Uri.parse(widget.file.uriFormatted))
+          ..initialize().then((_) {
+            setState(() {});
+          });
   }
 
   @override
   void initState() {
-    gitThumbnail();
+    initVideo();
     super.initState();
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return thumb != null
+    // ignore: unnecessary_null_comparison
+    return widget.file != null
         ? Stack(
             alignment: Alignment.center,
             children: [
-              Image.memory(
-                thumb,
-                height: MediaQuery.of(context).size.height * 0.4,
-                width: MediaQuery.of(context).size.width * 0.8,
-                fit: BoxFit.cover,
+              AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: VideoPlayer(_controller),
               ),
-              const Icon(
-                Icons.play_arrow,
-                color: Colors.white,
-                size: 50,
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    _controller.value.isPlaying
+                        ? _controller.pause()
+                        : _controller.play();
+                  });
+                },
+                child: Icon(
+                  _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                  color: Colors.white,
+                  size: 50,
+                ),
               ),
               Positioned(
                 top: 3,

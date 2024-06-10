@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import 'app_bar_icons.dart';
@@ -20,8 +18,8 @@ class SelectImageWidget extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
           child: image != null
-              ? Image.file(
-                  File(image!),
+              ? Image.network(
+                  image!,
                   fit: BoxFit.cover,
                 )
               : const Icon(Icons.image),

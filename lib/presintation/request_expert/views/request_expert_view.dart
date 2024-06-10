@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../controllers/request_expert_controller.dart';
 import '../widgets/app_bar_icons.dart';
 import '../widgets/custom_steper.dart';
@@ -11,9 +12,15 @@ import 'steps/professional_information.dart';
 import 'steps/social_media.dart';
 import 'steps/submet_step.dart';
 
-class RequestExpertView extends StatelessWidget {
-  RequestExpertView({super.key});
-  // final RequestExpertController controller = Get.put(RequestExpertController());
+class RequestExpertView extends StatefulWidget {
+  const RequestExpertView({super.key});
+
+  @override
+  State<RequestExpertView> createState() => _RequestExpertViewState();
+}
+
+class _RequestExpertViewState extends State<RequestExpertView>
+    with WidgetsBindingObserver {
   final List _formsKey = [
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
@@ -22,17 +29,73 @@ class RequestExpertView extends StatelessWidget {
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
   ];
+
   final TextEditingController _name = TextEditingController();
+
   final TextEditingController _englishName = TextEditingController();
+
   final TextEditingController _nickname = TextEditingController();
+
   final TextEditingController _phone = TextEditingController();
+
   final TextEditingController _about = TextEditingController();
+
   final TextEditingController _tiktok = TextEditingController();
+
   final TextEditingController _facebook = TextEditingController();
+
   final TextEditingController _linkedin = TextEditingController();
+
   final TextEditingController _snapchat = TextEditingController();
+
   final TextEditingController _twitter = TextEditingController();
+
   final TextEditingController _insta = TextEditingController();
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) _cache();
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void dispose() {
+    _cache();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    final box = GetStorage();
+    _name.text = box.read('name') ?? "";
+    _englishName.text = box.read('englishNmae') ?? "";
+    _nickname.text = box.read('nickname') ?? "";
+    _phone.text = box.read('phoneNumber') ?? "";
+    _about.text = box.read('about') ?? "";
+    _tiktok.text = box.read('tiktok') ?? "";
+    _facebook.text = box.read('facebook') ?? "";
+    _linkedin.text = box.read('linkedin') ?? "";
+    _snapchat.text = box.read('snapchat') ?? "";
+    _twitter.text = box.read('twitter') ?? "";
+    _insta.text = box.read('insta') ?? "";
+
+    super.initState();
+  }
+
+  void _cache() => Get.find<RequestExpertController>().cache(
+        name: _name.text,
+        englishName: _englishName.text,
+        phoneNumber: _phone.text,
+        about: _about.text,
+        tiktok: _tiktok.text,
+        snapchat: _snapchat.text,
+        facebook: _facebook.text,
+        insta: _insta.text,
+        nickname: _nickname.text,
+        linkedin: _linkedin.text,
+        twitter: _twitter.text,
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +115,7 @@ class RequestExpertView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (controller.currentPage > 0 &&
-                        controller.currentPage < 4)
+                        controller.currentPage < 5)
                       StepControllerButton(
                         onPressed: controller.currentPage > 0
                             ? () => controller.decrementPage()

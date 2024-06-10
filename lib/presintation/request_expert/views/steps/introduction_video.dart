@@ -17,9 +17,9 @@ class IntroductionVideo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-              controller.pickedVideo.value != null
+              controller.video.value != null
                   ? PickedVideoWidget(
-                      controller.pickedVideo.value!,
+                      controller.video.value!,
                       delete: controller.deleteVideo,
                     )
                   : Row(

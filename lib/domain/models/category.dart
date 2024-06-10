@@ -1,4 +1,6 @@
-class Category {
+import 'model.dart';
+
+class Category implements Model {
   final int id;
   final int countExperts;
   final String name;
@@ -11,6 +13,7 @@ class Category {
     required this.color,
     required this.icon,
   });
+  @override
   factory Category.fromJson(Map<String, dynamic> json) => Category(
         id: json['mainCategoryId'],
         name: json['mainCategoryName'],
@@ -20,4 +23,11 @@ class Category {
       );
   static List<Category> fromList(List list) =>
       list.map((e) => Category.fromJson(e)).toList();
+  Map<String, dynamic> toJson() => {
+        'mainCategoryId': id,
+        'mainCategoryName': name,
+        'countExperts': countExperts,
+        'color': color,
+        'icon': icon,
+      };
 }
