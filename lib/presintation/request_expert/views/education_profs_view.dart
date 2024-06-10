@@ -27,9 +27,9 @@ class EducationProfsView extends StatelessWidget {
                     spacing: 20,
                     runSpacing: 20,
                     children: [
-                      for (int i = 0; i < controller.ids.value.length; i++)
+                      for (int i = 0; i < controller.proofs.value.length; i++)
                         SelectedFileWidget(
-                          controller.ids.value[i],
+                          controller.proofs.value[i],
                           remove: () => controller.removeItemId(i),
                         ),
                     ],
