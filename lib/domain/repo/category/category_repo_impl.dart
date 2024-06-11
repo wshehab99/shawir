@@ -61,11 +61,16 @@ class CategoryRepoImpl implements CategoryRepo {
 
   @override
   Future<Either<Failure, UploadDocumentsResponse>> uploadDocument(
-      UploadDocumentRequest request) async {
+    UploadDocumentRequest request, {
+    void Function(int, int)? onSentProgress,
+  }) async {
     //check if there is internet connection
     if (await _info.check) {
       try {
-        var response = await _api.uploadDocument(request);
+        var response = await _api.uploadDocument(
+          request,
+          onSentProgress: onSentProgress,
+        );
         return Right(response);
       } catch (error) {
         return Left(Handler.handle(error).failure);
@@ -95,11 +100,16 @@ class CategoryRepoImpl implements CategoryRepo {
 
   @override
   Future<Either<Failure, UploadDocumentsResponse>> uploadVideo(
-      UploadVideoRequest request) async {
+    UploadVideoRequest request, {
+    void Function(int, int)? onSentProgress,
+  }) async {
     //check if there is internet connection
     if (await _info.check) {
       try {
-        var response = await _api.uploadVideo(request);
+        var response = await _api.uploadVideo(
+          request,
+          onSentProgress: onSentProgress,
+        );
         return Right(response);
       } catch (error) {
         return Left(Handler.handle(error).failure);

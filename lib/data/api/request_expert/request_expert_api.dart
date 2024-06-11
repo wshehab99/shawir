@@ -16,9 +16,15 @@ abstract class CategoryApi {
   factory CategoryApi(DioMethods dio) = CategoryApiImpl;
   Future<List<Category>> categories();
   Future<List<SubCategory>> subCategories(int id);
-  Future<UploadDocumentsResponse> uploadDocument(UploadDocumentRequest request);
+  Future<UploadDocumentsResponse> uploadDocument(
+    UploadDocumentRequest request, {
+    void Function(int, int)? onSentProgress,
+  });
   Future<ExpertAvatar> changeAvatar(UpdateAvatarRequest request);
-  Future<UploadDocumentsResponse> uploadVideo(UploadVideoRequest request);
+  Future<UploadDocumentsResponse> uploadVideo(UploadVideoRequest request,{
+        void Function(int, int)? onSentProgress,
+
+  });
   Future<LanguagesResponse> getLanguges();
   Future<ProfessionsResponse> getProffisions();
   Future<AddAccountResponse> addAccount(RequestExpertRequest request);

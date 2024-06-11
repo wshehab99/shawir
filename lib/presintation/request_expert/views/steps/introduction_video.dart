@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shawir/presintation/request_expert/widgets/compress_progress.dart';
+import 'package:shawir/presintation/request_expert/widgets/upload_progress.dart';
 
 import '../../controllers/request_expert_controller.dart';
 import '../../widgets/picked_video_widget.dart';
@@ -15,25 +17,29 @@ class IntroductionVideo extends StatelessWidget {
         builder: (controller) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                controller.video.value != null
-                    ? PickedVideoWidget(
-                        controller.video.value!,
-                        delete: controller.deleteVideo,
-                      )
-                    : Row(
+            child: controller.isCompress.value
+                ? const CompressProgress()
+                : controller.videLoad.value
+                    ? UploadProgress(controller.progress.value)
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          StepControllerButton(
-                            text: "Pick Video",
-                            onPressed: controller.pickVideo,
-                          ),
+                          controller.video.value != null
+                              ? PickedVideoWidget(
+                                  controller.video.value!,
+                                  delete: controller.deleteVideo,
+                                )
+                              : Row(
+                                  children: [
+                                    StepControllerButton(
+                                      text: "Pick Video",
+                                      onPressed: controller.pickVideo,
+                                    ),
+                                  ],
+                                ),
                         ],
                       ),
-              ],
-            ),
           );
         });
   }

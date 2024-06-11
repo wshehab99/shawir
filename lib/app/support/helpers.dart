@@ -1,5 +1,6 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:shawir/presintation/request_expert/widgets/delete_dialog.dart';
 import '../../domain/models/avatar.dart';
 import '../../domain/models/category.dart';
 import '../../domain/models/document.dart';
@@ -65,3 +66,14 @@ showCategoryBottomsheet(
             itemCount: items.length),
       ),
     );
+Future showDeleteDialog(
+  BuildContext context, {
+  required String message,
+  required void Function() submit,
+}) =>
+    showDialog(
+        context: context,
+        builder: (context) => DeleteDialog(
+              submit: submit,
+              message: message,
+            ));

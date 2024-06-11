@@ -10,7 +10,7 @@ class RequestExpertRequest {
   final String aboutMe;
   final String nameEnglish;
   final String nickname;
-  final Document introductionVideo;
+  final Document? introductionVideo;
   final List<SocialMedia> socialMedia;
   final Category category;
   final List<SubCategory> subCategory;
@@ -33,22 +33,29 @@ class RequestExpertRequest {
     required this.subCategory,
     required this.languages,
   });
-  Map<String, dynamic> toJson() => {
-        'category': category.id,
-        'fullName': fullName,
-        'phoneNumber': phoneNumber,
-        'aboutMe': aboutMe,
-        'nameEnglish': nameEnglish,
-        'nickname': nickname,
-        'introductionVideo': introductionVideo.documentUri,
-        'subCategory': subCategory.map((e) => e.toJson()).toList(),
-        'socialMedia': SocialMedia.toListJson(socialMedia),
-        'educationFiles': educationFiles.map((e) => e.documentUri).toList(),
-        'personalFiles': personalFiles.map((e) => e.documentUri).toList(),
-        'experienceCertificatesFiles':
-            experienceCertificatesFiles.map((e) => e.documentUri).toList(),
-        'languages': languages.map((e) => e.toJson()).toList()
-      };
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> data = {
+      'category': category.id,
+      'fullName': fullName,
+      'phoneNumber': phoneNumber,
+      'aboutMe': aboutMe,
+      'nameEnglish': nameEnglish,
+      'nickname': nickname,
+      'subCategory': subCategory.map((e) => e.toJson()).toList(),
+      'socialMedia': SocialMedia.toListJson(socialMedia),
+      'educationFiles': educationFiles.map((e) => e.documentUri).toList(),
+      'personalFiles': personalFiles.map((e) => e.documentUri).toList(),
+      'experienceCertificatesFiles':
+          experienceCertificatesFiles.map((e) => e.documentUri).toList(),
+      'languages': languages.map((e) => e.toJson()).toList()
+    };
+    if (introductionVideo != null) {
+      data.addAll({
+        'introductionVideo': introductionVideo!.documentUri,
+      });
+    }
+    return data;
+  }
 }
 
 class SocialMedia {

@@ -17,7 +17,7 @@ abstract class Validator {
 
   static String? englishNameValidator(String? value) {
     if (value == null || !RegExp(r"[a-zA-Z]+").hasMatch(value)) {
-      return "Name can't be empty";
+      return "Please, write your name in english";
     }
     return null;
   }

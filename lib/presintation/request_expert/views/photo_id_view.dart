@@ -5,6 +5,7 @@ import '../../../app/support/helpers.dart';
 import '../controllers/request_expert_controller.dart';
 import '../widgets/app_bar_icons.dart';
 import '../widgets/selected_file_widget.dart';
+import '../widgets/upload_progress.dart';
 
 class PhotoIdView extends StatelessWidget {
   const PhotoIdView({super.key});
@@ -22,7 +23,7 @@ class PhotoIdView extends StatelessWidget {
             body: Padding(
               padding: const EdgeInsets.all(8.0),
               child: controller.categoryLoad.value
-                  ? const Center(child: CircularProgressIndicator())
+                  ? UploadProgress(controller.progress.value)
                   : Column(
                       children: [
                         Wrap(

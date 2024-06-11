@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../controllers/request_expert_controller.dart';
-import '../widgets/app_bar_icons.dart';
 import '../widgets/step_controller_button.dart';
 import 'steps/attachment_upload.dart';
 import 'steps/category_step.dart';
@@ -100,7 +99,6 @@ class _RequestExpertViewState extends State<RequestExpertView>
     return Scaffold(
       appBar: AppBar(
         title: const Text("Request an expert"),
-        leading: const BackIcon(),
       ),
       body: GetBuilder<RequestExpertController>(
         init: Get.find<RequestExpertController>(),
@@ -113,7 +111,7 @@ class _RequestExpertViewState extends State<RequestExpertView>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (controller.currentPage > 0 &&
-                        controller.currentPage < 5)
+                        controller.currentPage <= 5)
                       StepControllerButton(
                         onPressed: controller.currentPage > 0
                             ? () => controller.decrementPage()
@@ -157,8 +155,8 @@ class _RequestExpertViewState extends State<RequestExpertView>
                 steps: [
                   Step(
                     title: controller.currentPage.value == 0
-                        ? Text('Personal')
-                        : SizedBox(),
+                        ? const Text('Personal')
+                        : const SizedBox(),
                     isActive: controller.currentPage.value == 0,
                     state: controller.currentPage.value > 0
                         ? StepState.complete
@@ -176,8 +174,8 @@ class _RequestExpertViewState extends State<RequestExpertView>
                   ),
                   Step(
                     title: controller.currentPage.value == 1
-                        ? Text('Personal')
-                        : SizedBox(),
+                        ? const Text('Personal')
+                        : const SizedBox(),
                     isActive: controller.currentPage.value == 1,
                     state: controller.currentPage.value > 1
                         ? StepState.complete
@@ -196,8 +194,8 @@ class _RequestExpertViewState extends State<RequestExpertView>
                   ),
                   Step(
                     title: controller.currentPage.value == 2
-                        ? Text('Personal')
-                        : SizedBox(),
+                        ? const Text('Personal')
+                        : const SizedBox(),
                     isActive: controller.currentPage.value == 2,
                     state: controller.currentPage.value > 2
                         ? StepState.complete
@@ -209,8 +207,8 @@ class _RequestExpertViewState extends State<RequestExpertView>
                   ),
                   Step(
                     title: controller.currentPage.value == 3
-                        ? Text('Personal')
-                        : SizedBox(),
+                        ? const Text('Personal')
+                        : const SizedBox(),
                     isActive: controller.currentPage.value == 3,
                     state: controller.currentPage.value > 3
                         ? StepState.complete
@@ -222,8 +220,8 @@ class _RequestExpertViewState extends State<RequestExpertView>
                   ),
                   Step(
                     title: controller.currentPage.value == 4
-                        ? Text('Personal')
-                        : SizedBox(),
+                        ? const Text('Personal')
+                        : const SizedBox(),
                     isActive: controller.currentPage.value == 4,
                     state: controller.currentPage.value > 4
                         ? StepState.complete
@@ -235,8 +233,8 @@ class _RequestExpertViewState extends State<RequestExpertView>
                   ),
                   Step(
                     title: controller.currentPage.value == 5
-                        ? Text('Personal')
-                        : SizedBox(),
+                        ? const Text('Personal')
+                        : const SizedBox(),
                     isActive: controller.currentPage.value == 4,
                     state: controller.currentPage.value > 4
                         ? StepState.complete
