@@ -33,6 +33,7 @@ class RequestExpertController extends GetxController {
   final twitterShown = false.obs;
   final youtubeShown = false.obs;
   final categoryLoad = false.obs;
+  final avatarLoad = false.obs;
 
   Rx<Country?> slectedCountry = Rx(null);
   void nextPage() {
@@ -192,9 +193,12 @@ class RequestExpertController extends GetxController {
 
   Rx<Category?> selectedCategory = Rx(null);
   void changeSelectedCategory(Category? value) {
-    selectedCategory.value = value;
-    update();
-    getSubCategories();
+    if (value != selectedCategory.value) {
+      selectedCategory.value = value;
+      selectedubCategories.value = [];
+      update();
+      getSubCategories();
+    }
   }
 
   Rx<Professions?> selectedProfisson = Rx(null);
@@ -203,19 +207,20 @@ class RequestExpertController extends GetxController {
     update();
   }
 
+  final subcategoryLoad = false.obs;
   List<SubCategory> subCategories = [];
   Rx<List<Languages>> languages = Rx([]);
 
   void getSubCategories() async {
     if (selectedCategory.value != null) {
-      categoryLoad.value = true;
+      subcategoryLoad.value = true;
 
       update();
       (await _repo.subCategories(selectedCategory.value!.id)).fold((l) {
-        categoryLoad.value = false;
+        subcategoryLoad.value = false;
         Get.snackbar("error", l.message);
       }, (r) {
-        categoryLoad.value = false;
+        subcategoryLoad.value = false;
         subCategories = r;
       });
       update();
@@ -401,7 +406,7 @@ class RequestExpertController extends GetxController {
     ImagePicker()
         .pickVideo(
             source: ImageSource.gallery,
-            maxDuration: const Duration(minutes: 1))
+            maxDuration: const Duration(seconds: 60))
         .then((value) {
       if (value != null) {
         if (GetUtils.isVideo(value.path)) {
@@ -460,14 +465,14 @@ class RequestExpertController extends GetxController {
 
   Rx<ExpertAvatar?> avatar = Rx(null);
   void uploadProfileImage(XFile file) async {
-    categoryLoad.value = true;
+    avatarLoad.value = true;
     (await _repo.changeAvatar(UpdateAvatarRequest(File(file.path)))).fold((l) {
       Get.snackbar("error", l.message);
-      categoryLoad.value = false;
+      avatarLoad.value = false;
       update();
     }, (r) {
       avatar.value = r;
-      categoryLoad.value = false;
+      avatarLoad.value = false;
       update();
     });
   }

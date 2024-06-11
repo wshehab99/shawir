@@ -30,4 +30,11 @@ class Category implements Model {
         'color': color,
         'icon': icon,
       };
+  @override
+  bool operator ==(Object other) {
+    return other is Category && other.id == id;
+  }
+
+  @override
+  int get hashCode => id;
 }
