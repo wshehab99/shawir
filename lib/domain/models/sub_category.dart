@@ -19,4 +19,8 @@ class SubCategory implements Model {
   bool operator ==(Object other) {
     return other is SubCategory && id == other.id;
   }
+  
+  @override
+  int get hashCode => id;
+  
 }

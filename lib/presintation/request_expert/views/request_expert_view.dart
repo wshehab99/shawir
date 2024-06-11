@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../controllers/request_expert_controller.dart';
 import '../widgets/step_controller_button.dart';
+import '../widgets/title_text.dart';
 import 'steps/attachment_upload.dart';
 import 'steps/category_step.dart';
 import 'steps/introduction_video.dart';
@@ -154,9 +156,10 @@ class _RequestExpertViewState extends State<RequestExpertView>
                 ),
                 steps: [
                   Step(
-                    title: controller.currentPage.value == 0
-                        ? const Text('Personal')
-                        : const SizedBox(),
+                    title: TitleText(
+                      'Personal informations',
+                      isShown: controller.currentPage.value == 0,
+                    ),
                     isActive: controller.currentPage.value == 0,
                     state: controller.currentPage.value > 0
                         ? StepState.complete
@@ -173,9 +176,10 @@ class _RequestExpertViewState extends State<RequestExpertView>
                     ),
                   ),
                   Step(
-                    title: controller.currentPage.value == 1
-                        ? const Text('Personal')
-                        : const SizedBox(),
+                    title: TitleText(
+                      'Social Media',
+                      isShown: controller.currentPage.value == 1,
+                    ),
                     isActive: controller.currentPage.value == 1,
                     state: controller.currentPage.value > 1
                         ? StepState.complete
@@ -193,9 +197,10 @@ class _RequestExpertViewState extends State<RequestExpertView>
                     ),
                   ),
                   Step(
-                    title: controller.currentPage.value == 2
-                        ? const Text('Personal')
-                        : const SizedBox(),
+                    title: TitleText(
+                      'Category',
+                      isShown: controller.currentPage.value == 2,
+                    ),
                     isActive: controller.currentPage.value == 2,
                     state: controller.currentPage.value > 2
                         ? StepState.complete
@@ -206,9 +211,10 @@ class _RequestExpertViewState extends State<RequestExpertView>
                     ),
                   ),
                   Step(
-                    title: controller.currentPage.value == 3
-                        ? const Text('Personal')
-                        : const SizedBox(),
+                    title: TitleText(
+                      'Attachment Upload',
+                      isShown: controller.currentPage.value == 3,
+                    ),
                     isActive: controller.currentPage.value == 3,
                     state: controller.currentPage.value > 3
                         ? StepState.complete
@@ -219,9 +225,10 @@ class _RequestExpertViewState extends State<RequestExpertView>
                     ),
                   ),
                   Step(
-                    title: controller.currentPage.value == 4
-                        ? const Text('Personal')
-                        : const SizedBox(),
+                    title: TitleText(
+                      'Introduction Video',
+                      isShown: controller.currentPage.value == 4,
+                    ),
                     isActive: controller.currentPage.value == 4,
                     state: controller.currentPage.value > 4
                         ? StepState.complete
@@ -232,11 +239,12 @@ class _RequestExpertViewState extends State<RequestExpertView>
                     ),
                   ),
                   Step(
-                    title: controller.currentPage.value == 5
-                        ? const Text('Personal')
-                        : const SizedBox(),
-                    isActive: controller.currentPage.value == 4,
-                    state: controller.currentPage.value > 4
+                    title: TitleText(
+                      'Submission',
+                      isShown: controller.currentPage.value == 5,
+                    ),
+                    isActive: controller.currentPage.value == 5,
+                    state: controller.currentPage.value > 5
                         ? StepState.complete
                         : StepState.indexed,
                     content: Form(
