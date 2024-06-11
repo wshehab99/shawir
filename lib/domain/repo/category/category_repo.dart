@@ -1,10 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:shawir/app/exceptions/failure.dart';
 import 'package:shawir/data/response/professions_response.dart';
+import 'package:shawir/domain/requests/request_expert_request.dart';
 import 'package:shawir/domain/requests/upload_document_request.dart';
 
 import '../../../data/api/request_expert/request_expert_api.dart';
 import '../../../data/info/network_info.dart';
+import '../../../data/response/add_account_response.dart';
 import '../../../data/response/languages_response.dart';
 import '../../../data/response/upload_documents_response.dart';
 import '../../models/avatar.dart';
@@ -27,4 +29,5 @@ abstract class CategoryRepo {
       UploadVideoRequest request);
   Future<Either<Failure, LanguagesResponse>> languges();
   Future<Either<Failure, ProfessionsResponse>> proffisions();
+  Future<Either<Failure, AddAccountResponse>> addAccount(RequestExpertRequest request);
 }

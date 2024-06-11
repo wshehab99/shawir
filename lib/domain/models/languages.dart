@@ -15,4 +15,11 @@ class Languages implements Model {
         'langId': langId,
         "langName": langName,
       };
+  @override
+  bool operator ==(Object other) {
+    return other is Languages && other.langId == langId;
+  }
+
+  @override
+  int get hashCode => langId;
 }

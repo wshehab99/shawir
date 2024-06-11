@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../controllers/request_expert_controller.dart';
 import '../widgets/app_bar_icons.dart';
-import '../widgets/custom_steper.dart';
 import '../widgets/step_controller_button.dart';
 import 'steps/attachment_upload.dart';
 import 'steps/category_step.dart';
@@ -107,9 +106,9 @@ class _RequestExpertViewState extends State<RequestExpertView>
         init: Get.find<RequestExpertController>(),
         builder: (controller) => controller.categoryLoad.value
             ? const Center(child: CircularProgressIndicator())
-            : CustomStepper(
+            : Stepper(
                 elevation: 0,
-                type: CustomStepperType.horizontal,
+                type: StepperType.horizontal,
                 currentStep: controller.currentPage.value,
                 controlsBuilder: (context, details) => Row(
                   mainAxisSize: MainAxisSize.min,
@@ -138,19 +137,31 @@ class _RequestExpertViewState extends State<RequestExpertView>
                     if (controller.currentPage.value > 4)
                       StepControllerButton(
                         onPressed: controller.currentPage > 4
-                            ? controller.sendRequest
+                            ? () => controller.requestExpert(
+                                  aboutMe: _about.text,
+                                  fullName: _name.text,
+                                  nameEnglish: _englishName.text,
+                                  nickname: _nickname.text,
+                                  phoneNumber: _phone.text,
+                                  facebook: _facebook.text,
+                                  insta: _insta.text,
+                                  linkedIn: _linkedin.text,
+                                  snapchat: _snapchat.text,
+                                  tiktok: _tiktok.text,
+                                  twitter: _twitter.text,
+                                )
                             : null,
                         text: "Send",
                       ),
                   ],
                 ),
                 steps: [
-                  CustomStep(
+                  Step(
+                    title: Text('Personal'),
                     isActive: controller.currentPage.value == 0,
                     state: controller.currentPage.value > 0
-                        ? CustomStepState.complete
-                        : CustomStepState.indexed,
-                    stepStyle: const CustomStepStyle(),
+                        ? StepState.complete
+                        : StepState.indexed,
                     content: Form(
                       key: _formsKey[0],
                       child: ProfessionalInformation(
@@ -162,11 +173,12 @@ class _RequestExpertViewState extends State<RequestExpertView>
                       ),
                     ),
                   ),
-                  CustomStep(
+                  Step(
+                    title: Text('Personal '),
                     isActive: controller.currentPage.value == 1,
                     state: controller.currentPage.value > 1
-                        ? CustomStepState.complete
-                        : CustomStepState.indexed,
+                        ? StepState.complete
+                        : StepState.indexed,
                     content: Form(
                       key: _formsKey[1],
                       child: SocialMedia(
@@ -179,41 +191,45 @@ class _RequestExpertViewState extends State<RequestExpertView>
                       ),
                     ),
                   ),
-                  CustomStep(
+                  Step(
+                    title: Text('Personal '),
                     isActive: controller.currentPage.value == 2,
                     state: controller.currentPage.value > 2
-                        ? CustomStepState.complete
-                        : CustomStepState.indexed,
+                        ? StepState.complete
+                        : StepState.indexed,
                     content: Form(
                       key: _formsKey[2],
                       child: const CategoryStep(),
                     ),
                   ),
-                  CustomStep(
+                  Step(
+                    title: Text('Personal '),
                     isActive: controller.currentPage.value == 3,
                     state: controller.currentPage.value > 3
-                        ? CustomStepState.complete
-                        : CustomStepState.indexed,
+                        ? StepState.complete
+                        : StepState.indexed,
                     content: Form(
                       key: _formsKey[3],
                       child: const AttachmentUpload(),
                     ),
                   ),
-                  CustomStep(
+                  Step(
+                    title: Text('Personal'),
                     isActive: controller.currentPage.value == 4,
                     state: controller.currentPage.value > 4
-                        ? CustomStepState.complete
-                        : CustomStepState.indexed,
+                        ? StepState.complete
+                        : StepState.indexed,
                     content: Form(
                       key: _formsKey[4],
                       child: const IntroductionVideo(),
                     ),
                   ),
-                  CustomStep(
+                  Step(
+                    title: const Text('Personal'),
                     isActive: controller.currentPage.value == 4,
                     state: controller.currentPage.value > 4
-                        ? CustomStepState.complete
-                        : CustomStepState.indexed,
+                        ? StepState.complete
+                        : StepState.indexed,
                     content: Form(
                       key: _formsKey[5],
                       child: const SubmetStep(),

@@ -14,39 +14,43 @@ class PhotoIdView extends StatelessWidget {
     return GetBuilder<RequestExpertController>(
         init: Get.find<RequestExpertController>(),
         builder: (controller) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text("Personal Photo & ID Proof"),
-              leading: const BackIcon(),
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Wrap(
-                    spacing: 20,
-                    runSpacing: 20,
-                    children: [
-                      for (int i = 0; i < controller.personal.value.length; i++)
-                        SelectedFileWidget(
-                          controller.personal.value[i],
-                          remove: () => controller.removeItemPersonal(i),
-                        ),
-                    ],
+          return controller.categoryLoad.value
+              ? const Center(child: CircularProgressIndicator())
+              : Scaffold(
+                  appBar: AppBar(
+                    title: const Text("Personal Photo & ID Proof"),
+                    leading: const BackIcon(),
                   ),
-                ],
-              ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => showPickFileBottomSheet(
-                context,
-                pickFile: controller.pickFilePersonal,
-                takeImage: controller.pickImageCameraPersonal,
-                pickImage: controller.pickImageGaleryPersonal,
-              ),
-              child: const Icon(Icons.add),
-            ),
-          );
+                  body: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Wrap(
+                          spacing: 20,
+                          runSpacing: 20,
+                          children: [
+                            for (int i = 0;
+                                i < controller.personal.value.length;
+                                i++)
+                              SelectedFileWidget(
+                                controller.personal.value[i],
+                                remove: () => controller.removeItemPersonal(i),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () => showPickFileBottomSheet(
+                      context,
+                      pickFile: controller.pickFilePersonal,
+                      takeImage: controller.pickImageCameraPersonal,
+                      pickImage: controller.pickImageGaleryPersonal,
+                    ),
+                    child: const Icon(Icons.add),
+                  ),
+                );
         });
   }
 }

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shawir/domain/models/languages.dart';
+import 'package:shawir/domain/requests/request_expert_request.dart';
 import 'package:shawir/domain/requests/upload_document_request.dart';
 
 import '../../../app/compressor/compressor.dart';
@@ -225,9 +226,13 @@ class RequestExpertController extends GetxController {
 
   Rx<List<SubCategory>> selectedubCategories = Rx([]);
   void changeSubSelectedCategory(SubCategory value) {
-    if (!selectedubCategories.value.contains(value)) {
-      selectedubCategories.value.add(value);
-      update();
+    if (selectedCategory.value != null) {
+      if (!selectedubCategories.value.contains(value)) {
+        selectedubCategories.value.add(value);
+        update();
+      }
+    } else {
+      Get.snackbar("category not selected", "plese select a ctegory first!");
     }
   }
 
@@ -592,4 +597,76 @@ class RequestExpertController extends GetxController {
     selectedLanguage.value =
         Languages.fromList(box.read('selectedLanguage') ?? []);
   }
+
+  void requestExpert({
+    required String aboutMe,
+    required String fullName,
+    required String nameEnglish,
+    required String nickname,
+    required String phoneNumber,
+    String? tiktok,
+    String? facebook,
+    String? insta,
+    String? snapchat,
+    String? linkedIn,
+    String? twitter,
+  }) async {
+    if (terms.value) {
+      categoryLoad.value = true;
+      update();
+      (await _repo.addAccount(
+        RequestExpertRequest(
+          aboutMe: aboutMe,
+          category: selectedCategory.value!,
+          educationFiles: proofs.value,
+          experienceCertificatesFiles: certificates.value,
+          fullName: fullName,
+          introductionVideo: video.value!,
+          nameEnglish: nameEnglish,
+          nickname: nickname,
+          personalFiles: personal.value,
+          phoneNumber: phoneNumber,
+          socialMedia: _getSocial(
+            facebook: facebook,
+            insta: insta,
+            linkedIn: linkedIn,
+            snapchat: snapchat,
+            tiktok: tiktok,
+            twitter: twitter,
+          ),
+          subCategory: selectedubCategories.value,
+          languages: selectedLanguage.value,
+        ),
+      ))
+          .fold((l) {
+        categoryLoad.value = false;
+
+        Get.snackbar("error", l.message);
+      }, (r) {
+        categoryLoad.value = false;
+
+        Get.snackbar("success", r.data);
+      });
+      update();
+    } else {
+      Get.snackbar("terms", "you should accepet terms");
+    }
+  }
+
+  List<SocialMedia> _getSocial({
+    String? tiktok,
+    String? facebook,
+    String? insta,
+    String? snapchat,
+    String? linkedIn,
+    String? twitter,
+  }) =>
+      <SocialMedia>[
+        SocialMedia('facebook', facebook ?? "", facebbokShown.value),
+        SocialMedia('tiktok', tiktok ?? "", tiktokShown.value),
+        SocialMedia('snapchat', snapchat ?? "", facebbokShown.value),
+        SocialMedia('instagram', insta ?? "", instaShown.value),
+        SocialMedia('linkedIn', linkedIn ?? "", inShown.value),
+        SocialMedia('twitter', twitter ?? "", twitterShown.value),
+      ];
 }

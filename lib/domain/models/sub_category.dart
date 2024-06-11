@@ -1,6 +1,6 @@
 import 'package:shawir/domain/models/model.dart';
 
-class SubCategory implements Model{
+class SubCategory implements Model {
   final int id;
   final String name;
   SubCategory({required this.id, required this.name});
@@ -15,4 +15,8 @@ class SubCategory implements Model{
         'subCategoryId': id,
         "subCategoryName": name,
       };
+  @override
+  bool operator ==(Object other) {
+    return other is SubCategory && id == other.id;
+  }
 }
