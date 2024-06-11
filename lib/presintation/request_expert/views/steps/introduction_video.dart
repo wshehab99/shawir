@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shawir/app/support/helpers.dart';
 import 'package:shawir/presintation/request_expert/widgets/compress_progress.dart';
 import 'package:shawir/presintation/request_expert/widgets/upload_progress.dart';
 
@@ -28,7 +29,12 @@ class IntroductionVideo extends StatelessWidget {
                           controller.video.value != null
                               ? PickedVideoWidget(
                                   controller.video.value!,
-                                  delete: controller.deleteVideo,
+                                  delete: () => showDeleteDialog(
+                                    context,
+                                    message:
+                                        "Are you sure you want to delete this video?",
+                                    submit: controller.deleteVideo,
+                                  ),
                                 )
                               : Row(
                                   children: [
