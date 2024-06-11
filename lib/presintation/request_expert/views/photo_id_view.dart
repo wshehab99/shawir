@@ -14,16 +14,16 @@ class PhotoIdView extends StatelessWidget {
     return GetBuilder<RequestExpertController>(
         init: Get.find<RequestExpertController>(),
         builder: (controller) {
-          return controller.categoryLoad.value
-              ? const Center(child: CircularProgressIndicator())
-              : Scaffold(
-                  appBar: AppBar(
-                    title: const Text("Personal Photo & ID Proof"),
-                    leading: const BackIcon(),
-                  ),
-                  body: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("Personal Photo & ID Proof"),
+              leading: const BackIcon(),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: controller.categoryLoad.value
+                  ? const Center(child: CircularProgressIndicator())
+                  : Column(
                       children: [
                         Wrap(
                           spacing: 20,
@@ -40,17 +40,23 @@ class PhotoIdView extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: () => showPickFileBottomSheet(
-                      context,
-                      pickFile: controller.pickFilePersonal,
-                      takeImage: controller.pickImageCameraPersonal,
-                      pickImage: controller.pickImageGaleryPersonal,
-                    ),
-                    child: const Icon(Icons.add),
-                  ),
-                );
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => showPickFileBottomSheet(
+                context,
+                pickFile: () => controller
+                    .pickFilePersonal()
+                    .then((_) => Navigator.pop(context)),
+                takeImage: () => controller
+                    .pickImageCameraPersonal()
+                    .then((_) => Navigator.pop(context)),
+                pickImage: () => controller
+                    .pickImageGaleryPersonal()
+                    .then((_) => Navigator.pop(context)),
+              ),
+              child: const Icon(Icons.add),
+            ),
+          );
         });
   }
 }

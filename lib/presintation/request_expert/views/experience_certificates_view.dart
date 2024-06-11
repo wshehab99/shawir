@@ -14,16 +14,16 @@ class ExperienceCertificatesView extends StatelessWidget {
     return GetBuilder<RequestExpertController>(
         init: Get.find<RequestExpertController>(),
         builder: (controller) {
-          return controller.categoryLoad.value
-              ? const Center(child: CircularProgressIndicator())
-              : Scaffold(
-                  appBar: AppBar(
-                    title: const Text("Experience cetificate"),
-                    leading: const BackIcon(),
-                  ),
-                  body: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("Experience cetificate"),
+              leading: const BackIcon(),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: controller.categoryLoad.value
+                  ? const Center(child: CircularProgressIndicator())
+                  : Column(
                       children: [
                         Wrap(
                           spacing: 20,
@@ -40,17 +40,23 @@ class ExperienceCertificatesView extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: () => showPickFileBottomSheet(
-                      context,
-                      pickFile: controller.pickFileCertificates,
-                      takeImage: controller.pickImageCameraCertificates,
-                      pickImage: controller.pickImageGaleryCertificates,
-                    ),
-                    child: const Icon(Icons.add),
-                  ),
-                );
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => showPickFileBottomSheet(
+                context,
+                pickFile: () => controller
+                    .pickFileCertificates()
+                    .then((_) => Navigator.pop(context)),
+                takeImage: () => controller
+                    .pickImageCameraCertificates()
+                    .then((_) => Navigator.pop(context)),
+                pickImage: () => controller
+                    .pickImageGaleryCertificates()
+                    .then((_) => Navigator.pop(context)),
+              ),
+              child: const Icon(Icons.add),
+            ),
+          );
         });
   }
 }

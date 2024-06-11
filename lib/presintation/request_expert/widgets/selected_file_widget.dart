@@ -22,7 +22,10 @@ class SelectedFileWidget extends StatelessWidget {
                   width: 100,
                   fit: BoxFit.cover,
                 )
-              : const Icon(Icons.picture_as_pdf),
+              : const Icon(
+                  Icons.picture_as_pdf,
+                  size: 100,
+                ),
           Positioned(
             top: 3,
             left: 3,

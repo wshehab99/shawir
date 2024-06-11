@@ -73,6 +73,7 @@ class CategoryStep extends StatelessWidget {
                             : Expanded(
                                 child: SubCategoriesWrap(
                                   controller.selectedubCategories.value,
+                                  delete: controller.deleteSubCategory,
                                 ),
                               ),
                         onTap: () => showCategoryBottomsheet(
@@ -138,6 +139,7 @@ class CategoryStep extends StatelessWidget {
                       : Expanded(
                           child: LanguagesWrap(
                             controller.selectedLanguage.value,
+                            delete: controller.deletLanguage,
                           ),
                         ),
                   onTap: () => showCategoryBottomsheet(
@@ -196,21 +198,29 @@ class CategoryDecoratedContainer extends StatelessWidget {
 }
 
 class SubCategoriesWrap extends StatelessWidget {
-  const SubCategoriesWrap(this.itms, {super.key});
+  const SubCategoriesWrap(this.itms, {super.key, required this.delete});
   final List<SubCategory> itms;
+  final void Function(int) delete;
   @override
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 10,
       runSpacing: 10,
-      children: itms.map((item) => SelectedSubCategory(item)).toList(),
+      children: [
+        for (int i = 0; i < itms.length; i++)
+          SelectedSubCategory(
+            itms[i],
+            onTap: () => delete(i),
+          ),
+      ],
     );
   }
 }
 
 class SelectedSubCategory extends StatelessWidget {
-  const SelectedSubCategory(this.subCategory, {super.key});
+  const SelectedSubCategory(this.subCategory, {super.key, this.onTap});
   final SubCategory subCategory;
+  final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -219,30 +229,52 @@ class SelectedSubCategory extends StatelessWidget {
         color: AppColors.appBarTitle,
         borderRadius: BorderRadius.circular(5),
       ),
-      child: Text(
-        subCategory.name,
-        style: Theme.of(context).textTheme.bodySmall,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            subCategory.name,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(width: 3),
+          InkWell(
+            onTap: onTap,
+            child: const Icon(
+              Icons.close,
+              color: Colors.white,
+              size: 15,
+            ),
+          )
+        ],
       ),
     );
   }
 }
 
 class LanguagesWrap extends StatelessWidget {
-  const LanguagesWrap(this.itms, {super.key});
+  const LanguagesWrap(this.itms, {super.key, required this.delete});
   final List<Languages> itms;
+  final void Function(int) delete;
   @override
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 10,
       runSpacing: 10,
-      children: itms.map((item) => SelectedLanguages(item)).toList(),
+      children: [
+        for (int i = 0; i < itms.length; i++)
+          SelectedLanguages(
+            itms[i],
+            onTap: () => delete(i),
+          ),
+      ],
     );
   }
 }
 
 class SelectedLanguages extends StatelessWidget {
-  const SelectedLanguages(this.languages, {super.key});
+  const SelectedLanguages(this.languages, {super.key, this.onTap});
   final Languages languages;
+  final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -251,9 +283,23 @@ class SelectedLanguages extends StatelessWidget {
         color: AppColors.appBarTitle,
         borderRadius: BorderRadius.circular(5),
       ),
-      child: Text(
-        languages.langName,
-        style: Theme.of(context).textTheme.bodySmall,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            languages.langName,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(width: 3),
+          InkWell(
+            onTap: onTap,
+            child: const Icon(
+              Icons.close,
+              color: Colors.white,
+              size: 15,
+            ),
+          )
+        ],
       ),
     );
   }
