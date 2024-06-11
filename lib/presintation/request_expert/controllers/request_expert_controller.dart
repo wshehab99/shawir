@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shawir/domain/models/languages.dart';
 import 'package:shawir/domain/requests/request_expert_request.dart';
 import 'package:shawir/domain/requests/upload_document_request.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../app/compressor/compressor.dart';
 import '../../../app/support/helpers.dart';
@@ -62,16 +63,6 @@ class RequestExpertController extends GetxController {
         Get.snackbar(
           "fields required",
           "please select Educational profs, Expieracne certificate and personal photo",
-        );
-      } else {
-        currentPage.value++;
-        update();
-      }
-    } else if (currentPage.value == 4) {
-      if (video.value == null) {
-        Get.snackbar(
-          "fields required",
-          "please select introduction video",
         );
       } else {
         currentPage.value++;
@@ -301,6 +292,8 @@ class RequestExpertController extends GetxController {
       if (validateFile(value.files.single.path ?? "")) {
         uploadDocument(XFile(value.files.single.path!), proofs.value)
             .then((_) => update());
+      } else {
+        Get.snackbar("pdf only", "you can upload pdf document only");
       }
     }
   }
@@ -335,6 +328,8 @@ class RequestExpertController extends GetxController {
       if (validateFile(value.files.single.path ?? "")) {
         uploadDocument(XFile(value.files.single.path!), certificates.value)
             .then((_) => update());
+      } else {
+        Get.snackbar("pdf only", "you can upload pdf document only");
       }
     }
   }
@@ -369,6 +364,8 @@ class RequestExpertController extends GetxController {
       if (validateFile(value.files.single.path ?? "")) {
         uploadDocument(XFile(value.files.single.path!), personal.value)
             .then((_) => update());
+      } else {
+        Get.snackbar("pdf only", "you can upload pdf document only");
       }
     }
   }
@@ -396,25 +393,34 @@ class RequestExpertController extends GetxController {
     update();
   }
 
-  // Rx<File?> pickedVideo = Rx(null);
+  Rx<bool> isCompress = Rx(false);
+  Rx<bool> videLoad = Rx(false);
   void pickVideo() {
     ImagePicker()
         .pickVideo(
             source: ImageSource.gallery,
             maxDuration: const Duration(seconds: 60))
-        .then((value) {
+        .then((value) async {
       if (value != null) {
         if (GetUtils.isVideo(value.path)) {
-          categoryLoad.value = true;
-          update();
-          _compressor.compressVideo(value.path).then((comprssedValue) {
-            if (comprssedValue != null) {
-              uploadVideo(comprssedValue.file!);
-              // categoryLoad.value = false;
-            }
-
+          VideoPlayerController testLengthController =
+              VideoPlayerController.file(File(value.path)); //Your file here
+          await testLengthController.initialize();
+          if (testLengthController.value.duration.inSeconds <= 60) {
+            // videLoad.value = true;
+            isCompress.value = true;
             update();
-          });
+            _compressor.compressVideo(value.path).then((comprssedValue) {
+              if (comprssedValue != null) {
+                isCompress.value = false;
+                update();
+                uploadVideo(comprssedValue.file!);
+              }
+            });
+          } else {
+            Get.snackbar(
+                "max duration", "you can't choose video more than 60 seconds");
+          }
         }
       }
     });
@@ -445,14 +451,18 @@ class RequestExpertController extends GetxController {
 
   Rx<Document?> video = Rx(null);
   void uploadVideo(File file) async {
-    categoryLoad.value = true;
-
-    (await _repo.uploadVideo(UploadVideoRequest(file))).fold((l) {
+    videLoad.value = true;
+    progress.value = 0;
+    (await _repo.uploadVideo(
+      UploadVideoRequest(file),
+      onSentProgress: onSentProgress,
+    ))
+        .fold((l) {
       Get.snackbar("error", l.message);
-      categoryLoad.value = false;
+      videLoad.value = false;
       update();
     }, (r) {
-      categoryLoad.value = false;
+      videLoad.value = false;
       video.value = r.data;
       update();
     });
@@ -475,8 +485,13 @@ class RequestExpertController extends GetxController {
   Rx<List<Document>> uploadedDocuments = Rx([]);
   Future<void> uploadDocument(XFile file, List<Document> list) async {
     categoryLoad.value = true;
-    (await _repo.uploadDocument(UploadDocumentRequest(File(file.path)))).fold(
-        (l) {
+    progress.value = 0;
+    update();
+    (await _repo.uploadDocument(
+      UploadDocumentRequest(File(file.path)),
+      onSentProgress: onSentProgress,
+    ))
+        .fold((l) {
       Get.snackbar("error", l.message);
       categoryLoad.value = false;
       update();
@@ -623,7 +638,7 @@ class RequestExpertController extends GetxController {
           educationFiles: proofs.value,
           experienceCertificatesFiles: certificates.value,
           fullName: fullName,
-          introductionVideo: video.value!,
+          introductionVideo: video.value,
           nameEnglish: nameEnglish,
           nickname: nickname,
           personalFiles: personal.value,
@@ -671,4 +686,10 @@ class RequestExpertController extends GetxController {
         SocialMedia('linkedIn', linkedIn ?? "", inShown.value),
         SocialMedia('twitter', twitter ?? "", twitterShown.value),
       ];
+  Rx<double> progress = Rx(0);
+  void onSentProgress(int sent, int total) {
+    print(">>>>__________total$total");
+    progress.value = sent / total;
+    update();
+  }
 }

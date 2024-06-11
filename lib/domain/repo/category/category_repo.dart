@@ -22,12 +22,17 @@ abstract class CategoryRepo {
 
   Future<Either<Failure, List<SubCategory>>> subCategories(int id);
   Future<Either<Failure, UploadDocumentsResponse>> uploadDocument(
-      UploadDocumentRequest request);
+    UploadDocumentRequest request, {
+    void Function(int, int)? onSentProgress,
+  });
   Future<Either<Failure, ExpertAvatar>> changeAvatar(
       UpdateAvatarRequest request);
   Future<Either<Failure, UploadDocumentsResponse>> uploadVideo(
-      UploadVideoRequest request);
+      UploadVideoRequest request,{
+    void Function(int, int)? onSentProgress,
+  });
   Future<Either<Failure, LanguagesResponse>> languges();
   Future<Either<Failure, ProfessionsResponse>> proffisions();
-  Future<Either<Failure, AddAccountResponse>> addAccount(RequestExpertRequest request);
+  Future<Either<Failure, AddAccountResponse>> addAccount(
+      RequestExpertRequest request);
 }

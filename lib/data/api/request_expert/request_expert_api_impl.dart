@@ -40,11 +40,14 @@ class CategoryApiImpl implements CategoryApi {
 
   @override
   Future<UploadDocumentsResponse> uploadDocument(
-      UploadDocumentRequest request) async {
+    UploadDocumentRequest request, {
+    void Function(int, int)? onSentProgress,
+  }) async {
     Response result = await _dio.post<UploadDocumentsResponse>(
       path: ApiConfig.uploadDocuments,
       data: await request.json,
       headers: {AppConfig.auth: ApiConfig.authToken},
+      onSentProgress: onSentProgress,
     );
     return UploadDocumentsResponse.fromJson(result.data!);
   }
@@ -61,11 +64,14 @@ class CategoryApiImpl implements CategoryApi {
 
   @override
   Future<UploadDocumentsResponse> uploadVideo(
-      UploadVideoRequest request) async {
+    UploadVideoRequest request, {
+    void Function(int, int)? onSentProgress,
+  }) async {
     Response result = await _dio.post<UploadDocumentsResponse>(
       path: ApiConfig.uploadVideo,
       data: await request.json,
       headers: {AppConfig.auth: ApiConfig.authToken},
+      onSentProgress: onSentProgress,
     );
     return UploadDocumentsResponse.fromJson(result.data!);
   }

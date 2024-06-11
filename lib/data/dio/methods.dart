@@ -31,6 +31,7 @@ class DioMethods {
     Map<String, dynamic>? extra,
     Map<String, dynamic>? queryParameters,
     var data,
+    void Function(int, int)? onSentProgress,
   }) =>
       _apiRequest<T>(
         method: "POST",
@@ -39,6 +40,7 @@ class DioMethods {
         headers: headers,
         extra: extra,
         queryParameters: queryParameters,
+        onSentProgress: onSentProgress,
       );
 
   //PUT
@@ -82,6 +84,7 @@ class DioMethods {
     Map<String, dynamic>? extra,
     Map<String, dynamic>? queryParameters,
     var data,
+    void Function(int, int)? onSentProgress,
   }) =>
       _dio.fetch(
         _setStreamType<T>(
@@ -94,6 +97,12 @@ class DioMethods {
             path,
             queryParameters: queryParameters,
             data: data,
+            onSendProgress: (sent, total) {
+              print("sent");
+              if (onSentProgress != null) {
+                onSentProgress(sent, total);
+              }
+            },
           ),
         ),
       );

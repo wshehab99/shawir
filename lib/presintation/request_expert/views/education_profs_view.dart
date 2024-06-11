@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shawir/presintation/request_expert/widgets/upload_progress.dart';
 
 import '../../../app/support/helpers.dart';
 import '../controllers/request_expert_controller.dart';
@@ -22,7 +23,7 @@ class EducationProfsView extends StatelessWidget {
             body: Padding(
               padding: const EdgeInsets.all(8.0),
               child: controller.categoryLoad.value
-                  ? const Center(child: CircularProgressIndicator())
+                  ? UploadProgress(controller.progress.value)
                   : Column(
                       children: [
                         Wrap(
