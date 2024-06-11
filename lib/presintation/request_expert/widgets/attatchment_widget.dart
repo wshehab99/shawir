@@ -17,9 +17,9 @@ class AttatchmentWidget extends StatelessWidget {
   final String label;
   final String imagePath;
   final String route;
-  final void Function() pickImage;
-  final void Function() takeImage;
-  final void Function() pickFile;
+  final Future<void> Function() pickImage;
+  final Future<void> Function() takeImage;
+  final Future<void> Function() pickFile;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -70,16 +70,22 @@ class AttatchmentWidget extends StatelessWidget {
                     onPressed: () => showPickFileBottomSheet(
                       context,
                       pickFile: () async {
-                        pickFile();
-                        // Navigator.pushNamed(context, route);
+                        pickFile().then((_) {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, route);
+                        });
                       },
                       pickImage: () async {
-                        pickImage();
-                        // Navigator.pushNamed(context, route);
+                        pickImage().then((_) {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, route);
+                        });
                       },
                       takeImage: () async {
-                        takeImage();
-                        // Navigator.pushNamed(context, route);
+                        takeImage().then((_) {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, route);
+                        });
                       },
                     ),
                     text: "Add Profe",
@@ -118,7 +124,7 @@ class AttatchmenIconWidgettWidget extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: color,

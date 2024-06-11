@@ -241,12 +241,22 @@ class RequestExpertController extends GetxController {
     }
   }
 
+  void deleteSubCategory(int index) {
+    selectedubCategories.value.removeAt(index);
+    update();
+  }
+
   Rx<List<Languages>> selectedLanguage = Rx([]);
   void selectLanguage(Languages value) {
     if (!selectedLanguage.value.contains(value)) {
       selectedLanguage.value.add(value);
       update();
     }
+  }
+
+  void deletLanguage(int index) {
+    selectedLanguage.value.removeAt(index);
+    update();
   }
 
   @override
@@ -286,36 +296,31 @@ class RequestExpertController extends GetxController {
   Future<FilePickerResult?> pickFile() => FilePicker.platform.pickFiles();
   Rx<List<Document>> proofs = Rx([]);
   Future<void> pickFileId() async {
-    pickFile().then((value) {
-      if (value != null) {
-        if (validateFile(value.files.single.path ?? "")) {
-          uploadDocument(XFile(value.files.single.path!), proofs.value);
-          update();
-        }
+    FilePickerResult? value = await pickFile();
+    if (value != null) {
+      if (validateFile(value.files.single.path ?? "")) {
+        uploadDocument(XFile(value.files.single.path!), proofs.value)
+            .then((_) => update());
       }
-    });
+    }
   }
 
   Future<void> pickImageCameraId() async {
-    pickImage(source: ImageSource.camera).then((value) {
-      if (value != null) {
-        if (validateFile(value.path)) {
-          uploadDocument(value, proofs.value);
-          update();
-        }
+    XFile? value = await pickImage(source: ImageSource.camera);
+    if (value != null) {
+      if (validateFile(value.path)) {
+        uploadDocument(value, proofs.value).then((_) => update());
       }
-    });
+    }
   }
 
   Future<void> pickImageGaleryId() async {
-    pickImage(source: ImageSource.gallery).then((value) {
-      if (value != null) {
-        if (validateFile(value.path)) {
-          uploadDocument(value, proofs.value);
-          update();
-        }
+    XFile? value = await pickImage(source: ImageSource.gallery);
+    if (value != null) {
+      if (validateFile(value.path)) {
+        uploadDocument(value, proofs.value).then((_) => update());
       }
-    });
+    }
   }
 
   void removeItemId(int index) {
@@ -325,36 +330,31 @@ class RequestExpertController extends GetxController {
 
   Rx<List<Document>> certificates = Rx([]);
   Future<void> pickFileCertificates() async {
-    pickFile().then((value) {
-      if (value != null) {
-        if (validateFile(value.files.single.path ?? "")) {
-          uploadDocument(XFile(value.files.single.path!), certificates.value);
-          update();
-        }
+    FilePickerResult? value = await pickFile();
+    if (value != null) {
+      if (validateFile(value.files.single.path ?? "")) {
+        uploadDocument(XFile(value.files.single.path!), certificates.value)
+            .then((_) => update());
       }
-    });
+    }
   }
 
   Future<void> pickImageCameraCertificates() async {
-    pickImage(source: ImageSource.camera).then((value) {
-      if (value != null) {
-        if (validateFile(value.path)) {
-          uploadDocument(value, certificates.value);
-          update();
-        }
+    XFile? value = await pickImage(source: ImageSource.camera);
+    if (value != null) {
+      if (validateFile(value.path)) {
+        uploadDocument(value, certificates.value).then((_) => update());
       }
-    });
+    }
   }
 
   Future<void> pickImageGaleryCertificates() async {
-    pickImage(source: ImageSource.gallery).then((value) {
-      if (value != null) {
-        if (validateFile(value.path)) {
-          uploadDocument(value, certificates.value);
-          update();
-        }
+    XFile? value = await pickImage(source: ImageSource.gallery);
+    if (value != null) {
+      if (validateFile(value.path)) {
+        uploadDocument(value, certificates.value).then((_) => update());
       }
-    });
+    }
   }
 
   void removeItemCertificates(int index) {
@@ -364,36 +364,31 @@ class RequestExpertController extends GetxController {
 
   Rx<List<Document>> personal = Rx([]);
   Future<void> pickFilePersonal() async {
-    pickFile().then((value) {
-      if (value != null) {
-        if (validateFile(value.files.single.path ?? "")) {
-          uploadDocument(XFile(value.files.single.path!), personal.value);
-          update();
-        }
+    FilePickerResult? value = await pickFile();
+    if (value != null) {
+      if (validateFile(value.files.single.path ?? "")) {
+        uploadDocument(XFile(value.files.single.path!), personal.value)
+            .then((_) => update());
       }
-    });
+    }
   }
 
   Future<void> pickImageCameraPersonal() async {
-    pickImage(source: ImageSource.camera).then((value) {
-      if (value != null) {
-        if (validateFile(value.path)) {
-          uploadDocument(value, personal.value);
-          update();
-        }
+    XFile? value = await pickImage(source: ImageSource.camera);
+    if (value != null) {
+      if (validateFile(value.path)) {
+        uploadDocument(value, personal.value).then((_) => update());
       }
-    });
+    }
   }
 
   Future<void> pickImageGaleryPersonal() async {
-    pickImage(source: ImageSource.gallery).then((value) {
-      if (value != null) {
-        if (validateFile(value.path)) {
-          uploadDocument(value, personal.value);
-          update();
-        }
+    XFile? value = await pickImage(source: ImageSource.gallery);
+    if (value != null) {
+      if (validateFile(value.path)) {
+        uploadDocument(value, personal.value).then((_) => update());
       }
-    });
+    }
   }
 
   void removeItemPersonal(int index) {
@@ -478,7 +473,7 @@ class RequestExpertController extends GetxController {
   }
 
   Rx<List<Document>> uploadedDocuments = Rx([]);
-  void uploadDocument(XFile file, List<Document> list) async {
+  Future<void> uploadDocument(XFile file, List<Document> list) async {
     categoryLoad.value = true;
     (await _repo.uploadDocument(UploadDocumentRequest(File(file.path)))).fold(
         (l) {
@@ -537,6 +532,7 @@ class RequestExpertController extends GetxController {
     await box.write("selectedLanguage", selectedLanguage.value);
     await box.write("selectedProfisson", selectedProfisson.value);
     await box.write("selectedubCategories", selectedubCategories.value);
+    await box.write("currentPage", currentPage.value);
     print("cache----------->>>>>>>>>");
   }
 
@@ -553,6 +549,7 @@ class RequestExpertController extends GetxController {
     slectedCountry.value = getStorage<Country>(box.read('slectedCountry'));
     avatar.value = getStorage<ExpertAvatar>(box.read('avatar'));
     terms.value = box.read('terms') ?? false;
+    currentPage.value = box.read('currentPage') ?? 0;
     selectedProfisson.value =
         getStorage<Professions>(box.read('selectedProfisson'));
   }

@@ -14,16 +14,16 @@ class EducationProfsView extends StatelessWidget {
     return GetBuilder<RequestExpertController>(
         init: Get.find<RequestExpertController>(),
         builder: (controller) {
-          return controller.categoryLoad.value
-              ? const Center(child: CircularProgressIndicator())
-              : Scaffold(
-                  appBar: AppBar(
-                    title: const Text("Education Profs"),
-                    leading: const BackIcon(),
-                  ),
-                  body: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("Education Profs"),
+              leading: const BackIcon(),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: controller.categoryLoad.value
+                  ? const Center(child: CircularProgressIndicator())
+                  : Column(
                       children: [
                         Wrap(
                           spacing: 20,
@@ -40,17 +40,22 @@ class EducationProfsView extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: () => showPickFileBottomSheet(
-                      context,
-                      pickFile: controller.pickFileId,
-                      takeImage: controller.pickImageCameraId,
-                      pickImage: controller.pickImageGaleryId,
-                    ),
-                    child: const Icon(Icons.add),
-                  ),
-                );
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => showPickFileBottomSheet(
+                context,
+                pickFile: () =>
+                    controller.pickFileId().then((_) => Navigator.pop(context)),
+                takeImage: () => controller
+                    .pickImageCameraId()
+                    .then((_) => Navigator.pop(context)),
+                pickImage: () => controller
+                    .pickImageGaleryId()
+                    .then((_) => Navigator.pop(context)),
+              ),
+              child: const Icon(Icons.add),
+            ),
+          );
         });
   }
 }
