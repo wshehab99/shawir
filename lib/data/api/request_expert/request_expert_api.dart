@@ -1,10 +1,12 @@
 import 'package:shawir/data/dio/methods.dart';
+import 'package:shawir/data/response/add_account_response.dart';
 import 'package:shawir/data/response/languages_response.dart';
 import 'package:shawir/data/response/professions_response.dart';
 import 'package:shawir/data/response/upload_documents_response.dart';
 import 'package:shawir/domain/models/sub_category.dart';
 import '../../../domain/models/avatar.dart';
 import '../../../domain/models/category.dart';
+import '../../../domain/requests/request_expert_request.dart';
 import '../../../domain/requests/update_avatar.dart';
 import '../../../domain/requests/upload_document_request.dart';
 import '../../../domain/requests/upload_video_request.dart';
@@ -19,4 +21,5 @@ abstract class CategoryApi {
   Future<UploadDocumentsResponse> uploadVideo(UploadVideoRequest request);
   Future<LanguagesResponse> getLanguges();
   Future<ProfessionsResponse> getProffisions();
+  Future<AddAccountResponse> addAccount(RequestExpertRequest request);
 }

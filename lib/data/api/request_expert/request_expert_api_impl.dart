@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:shawir/data/dio/methods.dart';
+import 'package:shawir/data/response/add_account_response.dart';
 import 'package:shawir/data/response/languages_response.dart';
 import 'package:shawir/data/response/professions_response.dart';
 import 'package:shawir/data/response/upload_documents_response.dart';
@@ -12,6 +13,7 @@ import 'package:shawir/domain/requests/upload_video_request.dart';
 
 import '../../../config/api.dart';
 import '../../../config/app.dart';
+import '../../../domain/requests/request_expert_request.dart';
 import 'request_expert_api.dart';
 
 class CategoryApiImpl implements CategoryApi {
@@ -84,5 +86,15 @@ class CategoryApiImpl implements CategoryApi {
       headers: {AppConfig.auth: ApiConfig.authToken},
     );
     return ProfessionsResponse.fromJson(result.data!);
+  }
+
+  @override
+  Future<AddAccountResponse> addAccount(RequestExpertRequest request) async {
+    Response result = await _dio.post<AddAccountResponse>(
+      path: ApiConfig.addAccount,
+      headers: {AppConfig.auth: ApiConfig.authToken},
+      data: request.toJson(),
+    );
+    return AddAccountResponse.fromJson(result.data!);
   }
 }

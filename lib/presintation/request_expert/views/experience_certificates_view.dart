@@ -14,41 +14,43 @@ class ExperienceCertificatesView extends StatelessWidget {
     return GetBuilder<RequestExpertController>(
         init: Get.find<RequestExpertController>(),
         builder: (controller) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text("Experience cetificate"),
-              leading: const BackIcon(),
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Wrap(
-                    spacing: 20,
-                    runSpacing: 20,
-                    children: [
-                      for (int i = 0;
-                          i < controller.certificates.value.length;
-                          i++)
-                        SelectedFileWidget(
-                          controller.certificates.value[i],
-                          remove: () => controller.removeItemId(i),
-                        ),
-                    ],
+          return controller.categoryLoad.value
+              ? const Center(child: CircularProgressIndicator())
+              : Scaffold(
+                  appBar: AppBar(
+                    title: const Text("Experience cetificate"),
+                    leading: const BackIcon(),
                   ),
-                ],
-              ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => showPickFileBottomSheet(
-                context,
-                pickFile: controller.pickFileCertificates,
-                takeImage: controller.pickImageCameraCertificates,
-                pickImage: controller.pickImageGaleryCertificates,
-              ),
-              child: const Icon(Icons.add),
-            ),
-          );
+                  body: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Wrap(
+                          spacing: 20,
+                          runSpacing: 20,
+                          children: [
+                            for (int i = 0;
+                                i < controller.certificates.value.length;
+                                i++)
+                              SelectedFileWidget(
+                                controller.certificates.value[i],
+                                remove: () => controller.removeItemId(i),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () => showPickFileBottomSheet(
+                      context,
+                      pickFile: controller.pickFileCertificates,
+                      takeImage: controller.pickImageCameraCertificates,
+                      pickImage: controller.pickImageGaleryCertificates,
+                    ),
+                    child: const Icon(Icons.add),
+                  ),
+                );
         });
   }
 }

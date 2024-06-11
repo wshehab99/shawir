@@ -14,39 +14,43 @@ class EducationProfsView extends StatelessWidget {
     return GetBuilder<RequestExpertController>(
         init: Get.find<RequestExpertController>(),
         builder: (controller) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text("Education Profs"),
-              leading: const BackIcon(),
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Wrap(
-                    spacing: 20,
-                    runSpacing: 20,
-                    children: [
-                      for (int i = 0; i < controller.proofs.value.length; i++)
-                        SelectedFileWidget(
-                          controller.proofs.value[i],
-                          remove: () => controller.removeItemId(i),
-                        ),
-                    ],
+          return controller.categoryLoad.value
+              ? const Center(child: CircularProgressIndicator())
+              : Scaffold(
+                  appBar: AppBar(
+                    title: const Text("Education Profs"),
+                    leading: const BackIcon(),
                   ),
-                ],
-              ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed:()=> showPickFileBottomSheet(
-                context,
-                pickFile: controller.pickFileId,
-                takeImage: controller.pickImageCameraId,
-                pickImage: controller.pickImageGaleryId,
-              ),
-              child: const Icon(Icons.add),
-            ),
-          );
+                  body: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Wrap(
+                          spacing: 20,
+                          runSpacing: 20,
+                          children: [
+                            for (int i = 0;
+                                i < controller.proofs.value.length;
+                                i++)
+                              SelectedFileWidget(
+                                controller.proofs.value[i],
+                                remove: () => controller.removeItemId(i),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () => showPickFileBottomSheet(
+                      context,
+                      pickFile: controller.pickFileId,
+                      takeImage: controller.pickImageCameraId,
+                      pickImage: controller.pickImageGaleryId,
+                    ),
+                    child: const Icon(Icons.add),
+                  ),
+                );
         });
   }
 }
