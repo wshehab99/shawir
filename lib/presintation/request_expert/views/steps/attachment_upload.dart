@@ -14,37 +14,40 @@ class AttachmentUpload extends StatelessWidget {
     return GetBuilder<RequestExpertController>(
         init: Get.find<RequestExpertController>(),
         builder: (controller) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AttatchmentWidget(
-                label: 'Education Proofs',
-                imagePath: AssetsManager.cv1,
-                pickFile: controller.pickFileId,
-                pickImage: controller.pickImageGaleryId,
-                takeImage: controller.pickImageCameraId,
-                route: Routes.educationProfs,
-              ),
-              const SizedBox(height: 15),
-              AttatchmentWidget(
-                label: 'Experience Certificates',
-                imagePath: AssetsManager.cv2,
-                pickFile: controller.pickFileCertificates,
-                pickImage: controller.pickImageGaleryCertificates,
-                takeImage: controller.pickImageCameraCertificates,
-                route: Routes.experienceCertificates,
-              ),
-              const SizedBox(height: 15),
-              AttatchmentWidget(
-                label: 'Personal Photo & ID Proof',
-                imagePath: AssetsManager.cv3,
-                pickFile: controller.pickFilePersonal,
-                pickImage: controller.pickImageGaleryPersonal,
-                takeImage: controller.pickImageCameraPersonal,
-                route: Routes.photoId,
-              ),
-            ],
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AttatchmentWidget(
+                  label: 'Education Proofs',
+                  imagePath: AssetsManager.cv1,
+                  pickFile: controller.pickFileId,
+                  pickImage: controller.pickImageGaleryId,
+                  takeImage: controller.pickImageCameraId,
+                  route: Routes.educationProfs,
+                ),
+                const SizedBox(height: 15),
+                AttatchmentWidget(
+                  label: 'Experience Certificates',
+                  imagePath: AssetsManager.cv2,
+                  pickFile: controller.pickFileCertificates,
+                  pickImage: controller.pickImageGaleryCertificates,
+                  takeImage: controller.pickImageCameraCertificates,
+                  route: Routes.experienceCertificates,
+                ),
+                const SizedBox(height: 15),
+                AttatchmentWidget(
+                  label: 'Personal Photo & ID Proof',
+                  imagePath: AssetsManager.cv3,
+                  pickFile: controller.pickFilePersonal,
+                  pickImage: controller.pickImageGaleryPersonal,
+                  takeImage: controller.pickImageCameraPersonal,
+                  route: Routes.photoId,
+                ),
+              ],
+            ),
           );
         });
   }

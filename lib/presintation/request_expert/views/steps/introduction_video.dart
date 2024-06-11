@@ -10,27 +10,30 @@ class IntroductionVideo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-       return GetBuilder<RequestExpertController>(
+    return GetBuilder<RequestExpertController>(
         init: Get.find<RequestExpertController>(),
         builder: (controller) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-              controller.video.value != null
-                  ? PickedVideoWidget(
-                      controller.video.value!,
-                      delete: controller.deleteVideo,
-                    )
-                  : Row(
-                      children: [
-                        StepControllerButton(
-                          text: "Pick Video",
-                          onPressed: controller.pickVideo,
-                        ),
-                      ],
-                    ),
-            ],
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                controller.video.value != null
+                    ? PickedVideoWidget(
+                        controller.video.value!,
+                        delete: controller.deleteVideo,
+                      )
+                    : Row(
+                        children: [
+                          StepControllerButton(
+                            text: "Pick Video",
+                            onPressed: controller.pickVideo,
+                          ),
+                        ],
+                      ),
+              ],
+            ),
           );
         });
   }

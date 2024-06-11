@@ -107,7 +107,6 @@ class _RequestExpertViewState extends State<RequestExpertView>
         builder: (controller) => controller.categoryLoad.value
             ? const Center(child: CircularProgressIndicator())
             : Stepper(
-                elevation: 0,
                 type: StepperType.horizontal,
                 currentStep: controller.currentPage.value,
                 controlsBuilder: (context, details) => Row(
@@ -157,7 +156,9 @@ class _RequestExpertViewState extends State<RequestExpertView>
                 ),
                 steps: [
                   Step(
-                    title: Text('Personal'),
+                    title: controller.currentPage.value == 0
+                        ? Text('Personal')
+                        : SizedBox(),
                     isActive: controller.currentPage.value == 0,
                     state: controller.currentPage.value > 0
                         ? StepState.complete
@@ -174,7 +175,9 @@ class _RequestExpertViewState extends State<RequestExpertView>
                     ),
                   ),
                   Step(
-                    title: Text('Personal '),
+                    title: controller.currentPage.value == 1
+                        ? Text('Personal')
+                        : SizedBox(),
                     isActive: controller.currentPage.value == 1,
                     state: controller.currentPage.value > 1
                         ? StepState.complete
@@ -192,7 +195,9 @@ class _RequestExpertViewState extends State<RequestExpertView>
                     ),
                   ),
                   Step(
-                    title: Text('Personal '),
+                    title: controller.currentPage.value == 2
+                        ? Text('Personal')
+                        : SizedBox(),
                     isActive: controller.currentPage.value == 2,
                     state: controller.currentPage.value > 2
                         ? StepState.complete
@@ -203,7 +208,9 @@ class _RequestExpertViewState extends State<RequestExpertView>
                     ),
                   ),
                   Step(
-                    title: Text('Personal '),
+                    title: controller.currentPage.value == 3
+                        ? Text('Personal')
+                        : SizedBox(),
                     isActive: controller.currentPage.value == 3,
                     state: controller.currentPage.value > 3
                         ? StepState.complete
@@ -214,7 +221,9 @@ class _RequestExpertViewState extends State<RequestExpertView>
                     ),
                   ),
                   Step(
-                    title: Text('Personal'),
+                    title: controller.currentPage.value == 4
+                        ? Text('Personal')
+                        : SizedBox(),
                     isActive: controller.currentPage.value == 4,
                     state: controller.currentPage.value > 4
                         ? StepState.complete
@@ -225,7 +234,9 @@ class _RequestExpertViewState extends State<RequestExpertView>
                     ),
                   ),
                   Step(
-                    title: const Text('Personal'),
+                    title: controller.currentPage.value == 5
+                        ? Text('Personal')
+                        : SizedBox(),
                     isActive: controller.currentPage.value == 4,
                     state: controller.currentPage.value > 4
                         ? StepState.complete

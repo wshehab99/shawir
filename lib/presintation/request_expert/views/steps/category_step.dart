@@ -15,141 +15,148 @@ class CategoryStep extends StatelessWidget {
     return GetBuilder<RequestExpertController>(
         init: Get.find<RequestExpertController>(),
         builder: (controller) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 30),
-              Text(
-                "Category",
-                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      color: AppColors.border,
-                    ),
-              ),
-              const SizedBox(height: 10),
-              CategoryDecoratedContainer(
-                child: Text(
-                  controller.selectedCategory.value != null
-                      ? controller.selectedCategory.value!.name
-                      : "select",
-                  style: controller.selectedCategory.value != null
-                      ? Theme.of(context).textTheme.headlineMedium
-                      : null,
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 30),
+                Text(
+                  "Category",
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                        color: AppColors.border,
+                      ),
                 ),
-                onTap: () => showCategoryBottomsheet(
-                  context,
-                  items: controller.categories,
-                  itemBuilder: (context, index) => ListTile(
-                    onTap: () {
-                      controller
-                          .changeSelectedCategory(controller.categories[index]);
-                      Navigator.pop(context);
-                    },
-                    title: Text(
-                      controller.categories[index].name,
+                const SizedBox(height: 10),
+                CategoryDecoratedContainer(
+                  child: Text(
+                    controller.selectedCategory.value != null
+                        ? controller.selectedCategory.value!.name
+                        : "select",
+                    style: controller.selectedCategory.value != null
+                        ? Theme.of(context).textTheme.headlineMedium
+                        : null,
+                  ),
+                  onTap: () => showCategoryBottomsheet(
+                    context,
+                    items: controller.categories,
+                    itemBuilder: (context, index) => ListTile(
+                      onTap: () {
+                        controller.changeSelectedCategory(
+                            controller.categories[index]);
+                        Navigator.pop(context);
+                      },
+                      title: Text(
+                        controller.categories[index].name,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 17),
-              Text(
-                "SubCategory",
-                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      color: AppColors.border,
-                    ),
-              ),
-              const SizedBox(height: 10),
-              CategoryDecoratedContainer(
-                child: controller.selectedubCategories.value.isEmpty
-                    ? const Text(
-                        "select",
+                const SizedBox(height: 17),
+                Text(
+                  "SubCategory",
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                        color: AppColors.border,
+                      ),
+                ),
+                const SizedBox(height: 10),
+                controller.subcategoryLoad.value
+                    ? const Center(
+                        child: CircularProgressIndicator(),
                       )
-                    : Expanded(
-                        child: SubCategoriesWrap(
-                          controller.selectedubCategories.value,
+                    : CategoryDecoratedContainer(
+                        child: controller.selectedubCategories.value.isEmpty
+                            ? const Text(
+                                "select",
+                              )
+                            : Expanded(
+                                child: SubCategoriesWrap(
+                                  controller.selectedubCategories.value,
+                                ),
+                              ),
+                        onTap: () => showCategoryBottomsheet(
+                          context,
+                          items: controller.subCategories,
+                          itemBuilder: (context, index) => ListTile(
+                            onTap: () {
+                              controller.changeSubSelectedCategory(
+                                  controller.subCategories[index]);
+                              Navigator.pop(context);
+                            },
+                            title: Text(
+                              controller.subCategories[index].name,
+                            ),
+                          ),
                         ),
                       ),
-                onTap: () => showCategoryBottomsheet(
-                  context,
-                  items: controller.subCategories,
-                  itemBuilder: (context, index) => ListTile(
-                    onTap: () {
-                      controller.changeSubSelectedCategory(
-                          controller.subCategories[index]);
-                      Navigator.pop(context);
-                    },
-                    title: Text(
-                      controller.subCategories[index].name,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 17),
-              Text(
-                "Profession",
-                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      color: AppColors.border,
-                    ),
-              ),
-              const SizedBox(height: 10),
-              CategoryDecoratedContainer(
-                child: Text(
-                  controller.selectedProfisson.value != null
-                      ? controller.selectedProfisson.value!.professionName
-                      : "select",
-                  style: controller.selectedProfisson.value != null
-                      ? Theme.of(context).textTheme.headlineMedium
-                      : null,
-                ),
-                onTap: () => showCategoryBottomsheet(
-                  context,
-                  items: controller.professions.value,
-                  itemBuilder: (context, index) => ListTile(
-                    onTap: () {
-                      controller.changeSelectedProfessions(
-                          controller.professions.value[index]);
-                      Navigator.pop(context);
-                    },
-                    title: Text(
-                      controller.professions.value[index].professionName,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 17),
-              Text(
-                "Languages",
-                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      color: AppColors.border,
-                    ),
-              ),
-              const SizedBox(height: 10),
-              CategoryDecoratedContainer(
-                child: controller.selectedLanguage.value.isEmpty
-                    ? const Text(
-                        "select",
-                      )
-                    : Expanded(
-                        child: LanguagesWrap(
-                          controller.selectedLanguage.value,
-                        ),
+                const SizedBox(height: 17),
+                Text(
+                  "Profession",
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                        color: AppColors.border,
                       ),
-                onTap: () => showCategoryBottomsheet(
-                  context,
-                  items: controller.languages.value,
-                  itemBuilder: (context, index) => ListTile(
-                    onTap: () {
-                      controller
-                          .selectLanguage(controller.languages.value[index]);
-                      Navigator.pop(context);
-                    },
-                    title: Text(
-                      controller.languages.value[index].langName,
+                ),
+                const SizedBox(height: 10),
+                CategoryDecoratedContainer(
+                  child: Text(
+                    controller.selectedProfisson.value != null
+                        ? controller.selectedProfisson.value!.professionName
+                        : "select",
+                    style: controller.selectedProfisson.value != null
+                        ? Theme.of(context).textTheme.headlineMedium
+                        : null,
+                  ),
+                  onTap: () => showCategoryBottomsheet(
+                    context,
+                    items: controller.professions.value,
+                    itemBuilder: (context, index) => ListTile(
+                      onTap: () {
+                        controller.changeSelectedProfessions(
+                            controller.professions.value[index]);
+                        Navigator.pop(context);
+                      },
+                      title: Text(
+                        controller.professions.value[index].professionName,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 17),
+                Text(
+                  "Languages",
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                        color: AppColors.border,
+                      ),
+                ),
+                const SizedBox(height: 10),
+                CategoryDecoratedContainer(
+                  child: controller.selectedLanguage.value.isEmpty
+                      ? const Text(
+                          "select",
+                        )
+                      : Expanded(
+                          child: LanguagesWrap(
+                            controller.selectedLanguage.value,
+                          ),
+                        ),
+                  onTap: () => showCategoryBottomsheet(
+                    context,
+                    items: controller.languages.value,
+                    itemBuilder: (context, index) => ListTile(
+                      onTap: () {
+                        controller
+                            .selectLanguage(controller.languages.value[index]);
+                        Navigator.pop(context);
+                      },
+                      title: Text(
+                        controller.languages.value[index].langName,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
         });
   }
